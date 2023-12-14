@@ -1,0 +1,34 @@
+﻿@model UniSystemTest.Models.Courses
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New Course</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="padding-bottom: 20px">
+                <label class="control-label" style="padding-bottom: 3px"><strong>Course Name</strong></label>
+                <input asp-for="courseName" class="form-control" />
+                <span asp-validation-for="courseName" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="padding-bottom: 40px">
+                <label class="control-label" style="padding-bottom: 3px"><strong>Teacher Name</strong></label>
+                <select asp-for="teacherId" class="form-control  form-select-sm form-select" asp-items="ViewBag.teacherId" style="height:40px"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-right:3px;" />
+                <a asp-action="Index" class="btn btn-secondary" style="margin-right:3px;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

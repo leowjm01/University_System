@@ -1,0 +1,53 @@
+﻿@model UniSystemTest.Models.Courses
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+@functions {
+    public string GetGender(bool isMale)
+    {
+        return isMale ? "Male" : "Female";
+    }
+}
+
+<h1>Course Details</h1>
+<hr />
+<br />
+<div>
+    <dl class="row" style="font-size: 20px">
+        <dt class="col-sm-2">
+            <strong>Course Name </strong>
+        </dt>
+        <dd class="col-sm-10">
+            :  <strong>@Html.DisplayFor(model => model.courseName) </strong>
+        </dd>
+
+        <dt class="col-sm-2">
+            <strong>Teacher Name </strong>
+        </dt>
+        <dd class="col-sm-10">
+            :  <strong>@Html.DisplayFor(model => model.Teachers.teacherName) </strong>
+        </dd>
+
+        <dt class="col-sm-2">
+            <strong>Teacher Email </strong>
+        </dt>
+        <dd class="col-sm-10">
+            :   <strong>@Html.DisplayFor(model => model.Teachers.email) </strong>
+        </dd>
+
+        <dt class="col-sm-2">
+            <strong>Gender </strong>
+        </dt>
+        <dd class="col-sm-10">
+            :  <strong>@GetGender(Model.Teachers.gender) </strong>
+        </dd>
+    </dl>
+</div>
+
+<div style="padding-top: 20px">
+    <a asp-action="Index" class="btn btn-primary style="margin-right:3px;">Back</a>
+    <a asp-controller="Teachers" asp-action="TeacherDetails" asp-route-id="@Model.Teachers.teacherId" class="btn btn-secondary" style="margin-right:3px;">Click here to View More .....</a>
+</div>

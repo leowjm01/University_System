@@ -1,0 +1,122 @@
+﻿@model IEnumerable<UniSystemTest.Models.Students>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@functions {
+    public string GetGender(bool isMale)
+    {
+        return isMale ? "Male" : "Female";
+    }
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["CancelMessage"] != null)
+{
+    <div class="alert alert-info" role="alert">
+        @TempData["CancelMessage"]
+    </div>
+}
+
+<h1 style="margin-bottom: 20px; ">Student Lists</h1>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-6 text-start">
+        <p>
+            <a href="@Url.Action("Create")" class="btn btn-primary">Create New</a>
+        </p>
+    </div>
+    <div class="col-md-6 text-end">
+        <form method="get" action="@Url.Action("Index", "Students")">
+            <div class="input-group">
+                <input type="text" id="studentName" name="studentName" class="form-control" placeholder="Search by Student Name" aria-label="Search by Student Name" aria-describedby="button-addon2">
+                <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center mt-5">
+        <p style="font-size: 35px; color: red; margin-top: 30px">No data available</p>
+    </div>
+}
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>
+                Gender
+            </th>
+            <th>
+                Email
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.studentName)
+                    </td>
+                    <td>
+                        @GetGender(item.gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.studentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+       
+    </tbody>
+</table>
+}
+@* pagination  *@
+<div>
+    @if (ViewBag.TotalPages > 1)
+    {
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Students" asp-action="Index" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Students" asp-action="Index" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Students" asp-action="Index" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Next</a>
+                </li>
+            }
+        </ul>
+    }
+</div>

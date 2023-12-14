@@ -1,0 +1,45 @@
+﻿@model UniSystemTest.Models.ScoreResults
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New Score Result </h1>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="padding-bottom: 20px">
+                <label class="control-label" style="padding-bottom: 3px"><strong>Mark</strong></label>
+                <input asp-for="mark" class="form-control" />
+                <span asp-validation-for="mark" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="padding-bottom: 20px">
+                <label class="control-label" style="padding-bottom: 3px"><strong>Course Name</strong></label>
+                <select asp-for="courseId" class="form-control  form-select-sm form-select" asp-items="ViewBag.courseId" style="height:40px"></select>
+            </div>
+
+            <div class="form-group" style="padding-bottom: 40px">
+                <label class="control-label" style="padding-bottom: 3px"><strong>Student Name</strong></label>
+                <select asp-for="studentId" class="form-control  form-select-sm form-select" asp-items="ViewBag.studentId" style="height:40px"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-right:3px;" />
+                <a asp-action="Index" class="btn btn-secondary" style="margin-right:3px;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

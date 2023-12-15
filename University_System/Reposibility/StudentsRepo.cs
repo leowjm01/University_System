@@ -65,7 +65,7 @@ namespace University_System.Reposibility
             parameter.Add(new SqlParameter("@email", student.email));
 
             var result = await Task.Run(() => _dbContext.Database
-           .ExecuteSqlRawAsync(@"exec UpdateStudent @studentId, @StudentName, @gender, @email", parameter.ToArray()));
+           .ExecuteSqlRawAsync(@"exec UpdateStudent @studentId, @StudentName, @email, @gender", parameter.ToArray()));
 
             return result;
         }

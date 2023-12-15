@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using UniSystemTest.Models;
 using University_System.Data;
 
@@ -73,7 +74,9 @@ namespace University_System.Reposibility
                     Students = new Students
                     {
                         studentId = RSC.studentId,
-                        studentName = RSC.studentName
+                        studentName = RSC.studentName,
+                        email = RSC.email,
+                        gender = RSC.gender
                     }
                 };
                 results.Add(r);
@@ -141,7 +144,6 @@ namespace University_System.Reposibility
                 .ToListAsync());
 
             return result.Count();
-
         }
 
         public async Task<int> Add(ScoreResults results, int examSelect)
@@ -199,7 +201,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@scoreResultId", id);
 
             return await Task.Run(() => _dbContext.Database
-            .ExecuteSqlRawAsync(@"exec DeletedScoreResult @scoreResultId", param));
+            .ExecuteSqlRawAsync(@"exec DeleteScoreResult @scoreResultId", param));
         }
     }
 }

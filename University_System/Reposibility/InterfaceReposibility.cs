@@ -7,6 +7,7 @@ namespace University_System.Reposibility
         Task<IEnumerable<Students>> GetAll();                               // retrive all student data
         Task<IEnumerable<Students>> GetByName(string name);                 // get students by student name
         Task<IEnumerable<Students>> GetById(int id);                        // get students by student id
+        //Task<int> GetExamSelectedByStudentId(int id);                       // get exam selected by student id
         Task<int> Add(Students student);                                    // add new student function
         Task<int> Update(Students student);                                 // update student details
         Task<int> Delete(int id);                                           // delete student (soft delete) 

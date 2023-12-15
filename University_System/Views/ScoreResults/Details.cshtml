@@ -4,45 +4,63 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@functions {
+    public string GetGender(bool isMale)
+    {
+        return isMale ? "Male" : "Female";
+    }
+}
 
+<h1>Score Result Details</h1>
+<hr />
+<br />
 <div>
-    <h4>ScoreResults</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.mark)
+    <dl class="row" style="font-size: 20px">
+        <dt class="col-sm-2">
+            <strong>Student Name</strong>
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.mark)
+        <dd class="col-sm-10">
+            :  <strong>@Html.DisplayFor(model => model.Students.studentName) </strong>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.grade)
+
+        <dt class="col-sm-2">
+            <strong>Student Email </strong>
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.grade)
+        <dd class="col-sm-10">
+            :  <strong>@Html.DisplayFor(model => model.Students.email) </strong>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Courses)
+
+        <dt class="col-sm-2">
+            <strong>Gender</strong>
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Courses.courseName)
+        <dd class="col-sm-10">
+            :  <strong>@GetGender(Model.Students.gender)  </strong>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Students)
+
+        <dt class="col-sm-2">
+            <strong>Course Name</strong>
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Students.email)
+        <dd class="col-sm-10">
+            :  <strong>@Html.DisplayFor(model => model.Courses.courseName)  </strong>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
+
+        <dt class="col-sm-2">
+            <strong>Mark </strong>
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
+        <dd class="col-sm-10">
+            :   <strong> @(Model.mark == null ? " NIL " : @Html.DisplayFor(model => model.mark))  </strong>
+        </dd>
+
+        <dt class="col-sm-2">
+            <strong>Grade </strong>
+        </dt>
+        <dd class="col-sm-10">
+            :   <strong>@(Model.grade == null ? " NIL " : @Html.DisplayFor(model => model.grade)) </strong>
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.scoreResultId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div style="padding-top: 20px">
+    <a asp-action="Index" class="btn btn-primary style="margin-right:3px;">Back</a>
+ @*    <a asp-controller="Teachers" asp-action="TeacherDetails" asp-route-id="@Model.Teachers.teacherId" class="btn btn-secondary" style="margin-right:3px;">Click here to View More .....</a> *@
 </div>

@@ -37,29 +37,27 @@ namespace University_System.Services
             return (await _reponsitory.GetExamSelectedByStudentId(studentId));
         }
 
-        public async Task<int> Add(ScoreResults result, int selectExam)
+        public async Task<int> Add(ScoreResults result, int examSelected)
         {
-            if (result.mark < 50 || result.mark == null) selectExam++;
+            examSelected += result.mark == null || result.mark < 50 ? 1: -1;
+
 
             checkGrade(result);
 
-            return (await _reponsitory.Add(result, selectExam));
+            return (await _reponsitory.Add(result, examSelected));
         }
 
-        public async Task<int> Update(ScoreResults result, int selectExam) 
+        public async Task<int> Update(ScoreResults result, int examSelected) 
         {
-            // check Selected exam
-            if (result.mark >= 50) selectExam--;
-
             //check grade
             checkGrade(result);
 
-            return (await _reponsitory.Update(result, selectExam)); // declare next step is repository
+            return (await _reponsitory.Update(result, examSelected)); // declare next step is repository
         }
 
-        public async Task<int> UpdateExamSelected(int studentId, int selectExam) 
+        public async Task<int> UpdateExamSelected(int studentId, int examSelected) 
         {
-            return (await _reponsitory.UpdateExamSelected(studentId, selectExam)); 
+            return (await _reponsitory.UpdateExamSelected(studentId, examSelected)); 
         }
 
         public async Task<int> Delete(int id) 
@@ -76,27 +74,27 @@ namespace University_System.Services
             }
             else
             {
-                int mark = Convert.ToInt32(result.mark);
+                decimal mark = Convert.ToDecimal(result.mark);
 
                 switch (mark)
                 {
-                    case int m when m >= 50 && m < 60:
+                    case decimal m when m >= 50 && m < 60:
                         result.grade = "D";
                         break;
 
-                    case int m when m >= 60 && m < 70:
+                    case decimal m when m >= 60 && m < 70:
                         result.grade = "C";
                         break;
 
-                    case int m when m >= 70 && m < 80:
+                    case decimal m when m >= 70 && m < 80:
                         result.grade = "B";
                         break;
 
-                    case int m when m >= 80 && m < 90:
+                    case decimal m when m >= 80 && m < 90:
                         result.grade = "A";
                         break;
 
-                    case int m when m >= 90 && m <= 100:
+                    case decimal m when m >= 90 && m <= 100:
                         result.grade = "A+";
                         break;
 

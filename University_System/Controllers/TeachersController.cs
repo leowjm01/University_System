@@ -56,8 +56,19 @@ namespace University_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                await TeachersService.Add(teachers);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await TeachersService.Add(teachers);
+
+                    //alert message
+                    TempData["SuccessMessage"] = "Create new teacher successful";
+
+                    return RedirectToAction(nameof(Index));
+                }catch(Exception ex)
+                {
+                    TempData["ErrorMessage"] = "The teacher email " + teachers.email + " has created. Please try create again !!";
+                    return RedirectToAction(nameof(Create));
+                }
             }
             return View(teachers);
         }
@@ -135,8 +146,17 @@ namespace University_System.Controllers
 
             if (ModelState.IsValid)
             {
-                await TeachersService.Update(teachers);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await TeachersService.Update(teachers);
+                    //alert message
+                    TempData["SuccessMessage"] = "Edit successful";
+                    return RedirectToAction(nameof(Index));
+                }catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "The teacher email " + teachers.email + " has created. Please try create again !!";
+                    return RedirectToAction(nameof(Edit));
+                }
             }
             return View(teachers);
         }
@@ -160,6 +180,8 @@ namespace University_System.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await TeachersService.Delete(id);
+            //alert message
+            TempData["SuccessMessage"] = "Delete successful";
             return RedirectToAction(nameof(Index));
         }
 

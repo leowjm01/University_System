@@ -3,8 +3,13 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit Student Details</h1>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-info" role="alert" style="color: red">
+        @TempData["ErrorMessage"]
+    </div>
+}
+<h1>Edit Teacher Details</h1>
 
 <hr />
 <div class="row">

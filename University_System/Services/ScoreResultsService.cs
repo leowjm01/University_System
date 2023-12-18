@@ -31,7 +31,10 @@ namespace University_System.Services
         {
             return (await _reponsitory.CheckCourseSelected(scoreResultId, studentId, courseId));
         }
-
+        public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id)
+        {
+            return (await _reponsitory.GetScoreResultByStudentId(id));
+        }
         public async Task<int> GetExamSelectedByStudentId(int studentId)
         {
             return (await _reponsitory.GetExamSelectedByStudentId(studentId));

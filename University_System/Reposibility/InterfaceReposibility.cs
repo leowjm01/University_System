@@ -29,7 +29,7 @@ namespace University_System.Reposibility
         Task<IEnumerable<Courses>> GetAll();                                // retrive all course data
         Task<IEnumerable<Courses>> GetByName(string name);                  // get courses by course name
         Task<IEnumerable<Courses>> GetById(int id);                         // get courses by course Id
-        Task<IEnumerable<Courses>> GetCourseByTeacherId(int id);            // get courses by course Id
+        Task<IEnumerable<Courses>> GetCourseByTeacherId(int id);            // get courses by teacher Id
         Task<int> Add(Courses course);                                      // add new course
         Task<int> Update(Courses course);                                   // update course details
         Task<int> Delete(int id);                                           // delete course
@@ -42,6 +42,7 @@ namespace University_System.Reposibility
         Task<IEnumerable<ScoreResults>> GetById(int id);                                                            // get score result data by score result id
         Task<IEnumerable<ScoreResults>> GetByStudentName(string name);                                              // get score result by student name
         Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId);       // Check couse repeated by student selected
+        Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id);                                          // get score result by student Id
         Task<int> GetExamSelectedByStudentId(int id);                                                               // get exam selected by student id
         Task<int> Add(ScoreResults results, int examSelect);                                                        // add new score result 
         Task<int> Update(ScoreResults results, int examSelect);                                                     // update score result details

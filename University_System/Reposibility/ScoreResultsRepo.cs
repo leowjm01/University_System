@@ -135,6 +135,43 @@ namespace University_System.Reposibility
             return result;
         }
 
+        public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id)
+        {
+            var param = new SqlParameter("@studentId", id);
+
+            var resultStudentCourse = await _dbContext.ResultStudentCourse
+                .FromSqlRaw(@"exec GetScoreResultByStudentId @studentId", param).ToListAsync();
+
+            var results = new List<ScoreResults>();
+
+            foreach (var RSC in resultStudentCourse)
+            {
+                var r = new ScoreResults()
+                {
+                    scoreResultId = RSC.scoreResultId,
+                    grade = RSC.grade,
+                    mark = RSC.mark,
+                    courseId = RSC.courseId,
+                    studentId = RSC.studentId,
+                    Courses = new Courses
+                    {
+                        courseId = RSC.courseId,
+                        courseName = RSC.courseName
+                    },
+                    Students = new Students
+                    {
+                        studentId = RSC.studentId,
+                        studentName = RSC.studentName,
+                        email = RSC.email,
+                        gender = RSC.gender
+                    }
+                };
+                results.Add(r);
+            }
+
+            return results;
+        }
+
         public async Task<int> GetExamSelectedByStudentId(int studentId)
         {
             var param = new SqlParameter("@studentId", studentId);

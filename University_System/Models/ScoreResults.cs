@@ -8,6 +8,7 @@ namespace UniSystemTest.Models
         [Key]
         public int? scoreResultId { get; set; }
 
+        [Range(0,100)]
         public decimal? mark { get; set; }
 
         [StringLength(5)]
@@ -43,6 +44,12 @@ namespace UniSystemTest.Models
         public int scoreResultId { get; set; }
         public decimal? mark { get; set; }
         public string? grade { get; set; }
+    }
+
+    public class StudentScoreResultViewModel
+    {
+        public Students? Students { get; set; }
+        public List<ScoreResults>? ScoreResults { get; set; }
     }
 }
 

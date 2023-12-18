@@ -22,19 +22,29 @@ namespace University_System.Services
             return (await _reponsitory.GetById(id));
         }
 
-        public async Task<IEnumerable<ScoreResults>> GetByStudentName(string name)
-        {
-            return (await _reponsitory.GetByStudentName(name));
-        }
-
         public async Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId)
         {
             return (await _reponsitory.CheckCourseSelected(scoreResultId, studentId, courseId));
         }
+
         public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id)
         {
             return (await _reponsitory.GetScoreResultByStudentId(id));
         }
+
+        public async Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize)
+        {
+            return (await _reponsitory.GetPagedScoreResults(studentName, pageNum, pageSize));
+        }
+        public async Task<int> GetCountAllScoreResults()
+        {
+            return (await _reponsitory.GetCountAllScoreResults());
+        }
+        public async Task<int> GetCountByStudentName(string name)
+        {
+            return (await _reponsitory.GetCountByStudentName(name));
+        }
+
         public async Task<int> GetExamSelectedByStudentId(int studentId)
         {
             return (await _reponsitory.GetExamSelectedByStudentId(studentId));

@@ -23,7 +23,6 @@ namespace UniSystemTest.Models
         [ForeignKey("Students")] 
         public int studentId { get; set; } 
 
-        [Required]
         public bool IsDeleted { get; set; }
     }
 

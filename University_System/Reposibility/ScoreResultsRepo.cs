@@ -85,43 +85,6 @@ namespace University_System.Reposibility
             return results;
         }
 
-        public async Task<IEnumerable<ScoreResults>> GetByStudentName(string name)
-        {
-            var param = new SqlParameter("@studentName", name);
-
-            var resultStudentCourse = await Task.Run(() => _dbContext.ResultStudentCourse
-            .FromSqlRaw(@"exec GetScoreResultByStudentName @studentName", param)
-            .ToListAsync());
-
-
-        var results = new List<ScoreResults>();
-
-            foreach (var RSC in resultStudentCourse)
-            {
-                var r = new ScoreResults()
-                {
-                    scoreResultId = RSC.scoreResultId,
-                    grade = RSC.grade,
-                    mark = RSC.mark,
-                    courseId = RSC.courseId,
-                    studentId = RSC.studentId,
-                    Courses = new Courses
-                    {
-                        courseId = RSC.courseId,
-                        courseName = RSC.courseName
-                    },
-                    Students = new Students
-                    {
-                        studentId = RSC.studentId,
-                        studentName = RSC.studentName
-                    }
-                };
-                results.Add(r);
-            }
-
-            return results;
-        }
-
         public async Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId)
         {
             var paramS = new SqlParameter("@studentId", studentId);
@@ -170,6 +133,64 @@ namespace University_System.Reposibility
             }
 
             return results;
+        }
+
+        public async Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize)
+        {
+
+            var resultStudentCourse = await _dbContext.ResultStudentCourse
+                .FromSqlRaw("exec GetPaginatedScoreResult @StudentName, @PageNum, @PageSize",
+                    new SqlParameter("@StudentName", studentName ?? (object)DBNull.Value),
+                    new SqlParameter("@PageNum", pageNum),
+                    new SqlParameter("@PageSize", pageSize))
+                .ToListAsync();
+
+            var results = new List<ScoreResults>();
+
+            foreach (var RSC in resultStudentCourse)
+            {
+                var r = new ScoreResults()
+                {
+                    scoreResultId = RSC.scoreResultId,
+                    grade = RSC.grade,
+                    mark = RSC.mark,
+                    Courses = new Courses
+                    {
+                        courseId = RSC.courseId,
+                        courseName = RSC.courseName
+                    },
+                    Students = new Students
+                    {
+                        studentId = RSC.studentId,
+                        studentName = RSC.studentName,
+                        gender = RSC.gender,
+                        email = RSC.email
+                    }
+                };
+                results.Add(r);
+            }
+
+            return (results);
+        }
+
+        public async Task<int> GetCountAllScoreResults()
+        {
+            var results = await _dbContext.ResultStudentCourse
+             .FromSqlRaw<ResultStudentCourse>("GetResultList")
+             .ToListAsync();
+
+            return results.Count();
+        }
+
+        public async Task<int> GetCountByStudentName(string name)
+        {
+            var param = new SqlParameter("@studentName", name ?? (object)DBNull.Value);
+
+            var result = await Task.Run(() => _dbContext.ResultStudentCourse
+                .FromSqlRaw(@"exec GetScoreResultByStudentName @studentName", param)
+                .ToListAsync());
+
+            return result.Count();
         }
 
         public async Task<int> GetExamSelectedByStudentId(int studentId)

@@ -9,7 +9,7 @@ namespace UniSystemTest.Models
         [Key]
         public int? studentId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The student name field is required.")]
         [StringLength(50)]
         public string? studentName { get; set; } = null!;
 
@@ -18,12 +18,12 @@ namespace UniSystemTest.Models
 
         [Required]
         [StringLength(50)]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Invalid email!! Example: ali@gmail.com")]
+        [RegularExpression(@"^\w+@\w+\.com$", ErrorMessage = "Invalid email!! Example: ali@gmail.com")]
         public string email { get; set; } = null!;
 
         public int? examSelected { get; set; }
 
-        [Required]
         public bool IsDeleted { get; set; }
     }
 }

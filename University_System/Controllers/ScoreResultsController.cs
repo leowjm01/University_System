@@ -30,21 +30,10 @@ namespace University_System.Controllers
         // GET: Score Result
         public async Task<IActionResult> Index(string studentName, int pageNum = 1, int pageSize = 10)
         {
-            IEnumerable<ScoreResults> results;
 
-            if (!string.IsNullOrEmpty(studentName))
-            {
-                results = await ScoreResultsService.GetByStudentName(studentName);
-            }
-            else
-            {
-                results = await ScoreResultsService.GetAll();
-            }
+            var paginatedScoreResults = await pagination(studentName, pageNum, pageSize);
 
-            //pagination
-            var paginatedScoreResult = pagination(results, pageNum, pageSize);
-
-            return View(paginatedScoreResult);
+            return View(paginatedScoreResults);
         }
 
         public async Task<IActionResult> Create()
@@ -242,6 +231,30 @@ namespace University_System.Controllers
                 ModelState.AddModelError("courseId", "Course already selected before. Please try select another course.....");
                 RedirectToAction(nameof(Create));
             }
+        }
+
+
+        //pagination
+        public async Task<IEnumerable<ScoreResults>> pagination(string studentName, int pageNum, int pageSize)
+        {
+
+            var paginatedScoreResult = await ScoreResultsService.GetPagedScoreResults(studentName, pageNum, pageSize);
+            int totalCount = 0;
+
+            if (studentName != null)
+            {
+                totalCount = await ScoreResultsService.GetCountByStudentName(studentName);
+            }
+            else
+            {
+                totalCount = await ScoreResultsService.GetCountAllScoreResults();
+            }
+
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            ViewBag.CurrentPage = pageNum;
+            ViewBag.PageSize = pageSize;
+
+            return paginatedScoreResult;
         }
 
 

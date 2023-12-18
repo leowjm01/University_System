@@ -27,21 +27,10 @@ namespace University_System.Controllers
         // GET: Courses
         public async Task<IActionResult> Index(string courseName, int pageNum = 1, int pageSize = 10)
         {
-            IEnumerable<Courses> courses;
 
-            if (!string.IsNullOrEmpty(courseName))
-            {
-                courses = await CoursesService.GetByName(courseName);
-            }
-            else
-            {
-                courses = await CoursesService.GetAll();
-            }
+            var paginatedCourses = await pagination(courseName, pageNum, pageSize);
 
-            //pagination
-            var paginatedTeachers = pagination(courses, pageNum, pageSize);
-
-            return View(paginatedTeachers);
+            return View(paginatedCourses);
         }
 
 
@@ -142,39 +131,27 @@ namespace University_System.Controllers
         }
 
 
-        //pagination 
-        public IEnumerable<Courses> pagination(IEnumerable<Courses> courses, int pageNum, int pageSize)
+        //pagination
+        public async Task<IEnumerable<Courses>> pagination(string courseName, int pageNum, int pageSize)
         {
-            // Store the original students for pagination
-            var originalStudents = courses.ToList();
 
-            int totalStudentsCount = originalStudents.Count();
-            int totalP = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
+            var paginatedCourses = await CoursesService.GetPagedCourses(courseName, pageNum, pageSize);
+            int totalCount = 0;
 
-            ViewBag.TotalPages = totalP;
-            ViewBag.CurrentPage = pageNum;
-            ViewBag.DisplayedStudentsCount = totalStudentsCount;
-            ViewBag.PageSize = pageSize;
-
-            int startIndex = (pageNum - 1) * pageSize;
-
-            if (startIndex >= totalStudentsCount)
+            if (courseName != null)
             {
-                if (totalStudentsCount > 0)
-                {
-                    // Calculate the maximum possible page number based on available data
-                    int maxPage = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
-                    return originalStudents.Skip((maxPage - 1) * pageSize).Take(pageSize).ToList();
-                }
-                else
-                {
-                    return originalStudents.Skip(0).Take(pageSize).ToList();
-                }
+                totalCount = await CoursesService.GetCountByName(courseName);
+            }
+            else
+            {
+                totalCount = await CoursesService.GetCountAllCourses();
             }
 
-            return originalStudents.Skip(startIndex)
-                .Take(pageSize > 10 ? 10 : pageSize)    // each page total display 10 data
-                .ToList();
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            ViewBag.CurrentPage = pageNum;
+            ViewBag.PageSize = pageSize;
+
+            return paginatedCourses;
         }
 
     }

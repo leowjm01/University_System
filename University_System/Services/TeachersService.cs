@@ -16,13 +16,21 @@ namespace University_System.Services
         {
             return (await _reponsitory.GetAll()); 
         }
-        public async Task<IEnumerable<Teachers>> GetByName(string name)
-        {
-            return (await _reponsitory.GetByName(name));
-        }
         public async Task<IEnumerable<Teachers>> GetById(int id)
         {
             return (await _reponsitory.GetById(id));
+        }
+        public async Task<IEnumerable<Teachers>> GetPagedTeachers(string teacherName, int pageNum, int pageSize)
+        {
+            return (await _reponsitory.GetPagedTeachers(teacherName, pageNum, pageSize));
+        }
+        public async Task<int> GetCountAllTeachers()
+        {
+            return (await _reponsitory.GetCountAllTeachers());
+        }
+        public async Task<int> GetCountByName(string name)
+        {
+            return (await _reponsitory.GetCountByName(name));
         }
         public async Task<int> Add(Teachers teacher)
         {

@@ -16,20 +16,11 @@ namespace University_System.Reposibility
 
         public async Task<IEnumerable<Students>> GetAll()
         {
-            return await _dbContext.Students
-                 .FromSqlRaw<Students>("GetStudentList")
-                 .ToListAsync();
-        }
+            var students = await _dbContext.Students
+             .FromSqlRaw<Students>("GetStudentList")
+             .ToListAsync();
 
-        public async Task<IEnumerable<Students>> GetByName(string name)
-        {
-            var param = new SqlParameter("@studentName", name);
-
-            var result = await Task.Run(() => _dbContext.Students
-                .FromSqlRaw(@"exec GetStudentName @studentName", param)
-                .ToListAsync());
-
-            return result;
+            return students;
         }
 
         public async Task<IEnumerable<Students>> GetById(int id)
@@ -41,6 +32,39 @@ namespace University_System.Reposibility
                 .ToListAsync());
 
             return result;
+        }
+        
+        public async Task<IEnumerable<Students>> GetPagedStudents(string studentName, int pageNum, int pageSize)
+        {
+
+            var students = await _dbContext.Students
+                .FromSqlRaw("exec GetPaginatedStudents @StudentName, @PageNum, @PageSize",
+                    new SqlParameter("@StudentName", studentName ?? (object)DBNull.Value),
+                    new SqlParameter("@PageNum", pageNum),
+                    new SqlParameter("@PageSize", pageSize))
+                .ToListAsync();
+
+            return (students);
+        }
+
+        public async Task<int> GetCountAllStudents()
+        {
+            var students = await _dbContext.Students
+             .FromSqlRaw<Students>("GetStudentList")
+             .ToListAsync();
+
+            return students.Count();
+        }
+
+        public async Task<int> GetCountByName(string name)
+        {
+            var param = new SqlParameter("@studentName", name ?? (object)DBNull.Value);
+
+            var result = await Task.Run(() => _dbContext.Students
+                .FromSqlRaw(@"exec GetStudentName @studentName", param)
+                .ToListAsync());
+
+            return result.Count();
         }
 
         public async Task<int> Add(Students student)

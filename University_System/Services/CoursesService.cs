@@ -16,17 +16,29 @@ namespace University_System.Services
         {
             return (await _reponsitory.GetAll());
         }
-        public async Task<IEnumerable<Courses>> GetByName(string name)
-        {
-            return (await _reponsitory.GetByName(name));
-        }
         public async Task<IEnumerable<Courses>> GetById(int id)
         {
             return (await _reponsitory.GetById(id));
         }
-        public async Task<IEnumerable<Courses>> GetCourseByTeacherId(int id)
+        public async Task<IEnumerable<Courses>> GetCourseByTeacherId(int id, int pageNum, int pageSize)
         {
-            return (await _reponsitory.GetCourseByTeacherId(id));
+            return (await _reponsitory.GetCourseByTeacherId(id, pageNum, pageSize));
+        }
+        public async Task<IEnumerable<Courses>> GetPagedCourses(string courseName, int pageNum, int pageSize)
+        {
+            return (await _reponsitory.GetPagedCourses(courseName, pageNum, pageSize));
+        }
+        public async Task<int> GetCountAllCourses()
+        {
+            return (await _reponsitory.GetCountAllCourses());
+        }
+        public async Task<int> GetCountAllCoursesByTeacherId(int id)
+        {
+            return (await _reponsitory.GetCountAllCoursesByTeacherId(id));
+        }
+        public async Task<int> GetCountByName(string name)
+        {
+            return (await _reponsitory.GetCountByName(name));
         }
         public async Task<int> Add(Courses course)
         {

@@ -26,21 +26,10 @@ namespace University_System.Controllers
         // GET: Teachers
         public async Task<IActionResult> Index(string teacherName, int pageNum = 1, int pageSize = 10)
         {
-            IEnumerable<Teachers> teachers;
 
-            if (!string.IsNullOrEmpty(teacherName))
-            {
-                teachers = await TeachersService.GetByName(teacherName);
-            }
-            else
-            {
-                teachers = await TeachersService.GetAll();
-            }
+            var paginatedteachers = await pagination(teacherName, pageNum, pageSize);
 
-            //pagination
-            var paginatedTeachers = pagination(teachers, pageNum, pageSize);
-
-            return View(paginatedTeachers);
+            return View(paginatedteachers);
         }
 
 
@@ -77,22 +66,25 @@ namespace University_System.Controllers
         // GET: Teachers/Details
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 10)
         {
-            var teacher = await TeachersService.GetById(id);
-            var course = await CourseService.GetCourseByTeacherId(id);
+            //var teacher = await TeachersService.GetById(id);
+            //var course = await CourseService.GetCourseByTeacherId(id, pageNum, pageSize);
 
-            if (teacher == null || course == null)
-            {
-                return NotFound();
-            }
+            //if (teacher == null || course == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var viewModel = new TeacherCourseViewModel
-            {
-                Teachers = teacher.FirstOrDefault(),
-                Courses = course.ToList(),
-            };
+            //var viewModel = new TeacherCourseViewModel
+            //{
+            //    Teachers = teacher.FirstOrDefault(),
+            //    Courses = course.ToList(),
+            //};
 
-            viewModel.Courses = paginationCourse(viewModel.Courses, pageNum, pageSize).ToList();
+            //viewModel.Courses = paginationCourse(viewModel.Courses, pageNum, pageSize).ToList();
 
+
+            //return View(viewModel);
+            var viewModel = await paginationCourse(id, pageNum, pageSize);
 
             return View(viewModel);
         }
@@ -101,22 +93,8 @@ namespace University_System.Controllers
         // GET: TeachersDetails
         public async Task<IActionResult> TeacherDetails(int id, int pageNum = 1, int pageSize = 10)
         {
-            var teacher = await TeachersService.GetById(id);
-            var course = await CourseService.GetCourseByTeacherId(id);
 
-            if (teacher == null || course == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = new TeacherCourseViewModel
-            {
-                Teachers = teacher.FirstOrDefault(),
-                Courses = course.ToList(),
-            };
-
-            viewModel.Courses = paginationCourse(viewModel.Courses, pageNum, pageSize).ToList();
-
+            var viewModel = await paginationCourse(id, pageNum, pageSize);
 
             return View(viewModel);
         }
@@ -186,74 +164,51 @@ namespace University_System.Controllers
         }
 
 
-        //pagination 
-        public IEnumerable<Teachers> pagination(IEnumerable<Teachers> teachers, int pageNum, int pageSize)
+        //pagination
+        public async Task<IEnumerable<Teachers>> pagination(string teacherName, int pageNum, int pageSize)
         {
-            // Store the original students for pagination
-            var originalStudents = teachers.ToList();
 
-            int totalStudentsCount = originalStudents.Count();
-            int totalP = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
+            var paginatedTeachers = await TeachersService.GetPagedTeachers(teacherName, pageNum, pageSize);
+            int totalCount = 0;
 
-            ViewBag.TotalPages = totalP;
-            ViewBag.CurrentPage = pageNum;
-            ViewBag.DisplayedStudentsCount = totalStudentsCount;
-            ViewBag.PageSize = pageSize;
-
-            int startIndex = (pageNum - 1) * pageSize;
-
-            if (startIndex >= totalStudentsCount)
+            if (teacherName != null)
             {
-                if (totalStudentsCount > 0)
-                {
-                    // Calculate the maximum possible page number based on available data
-                    int maxPage = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
-                    return originalStudents.Skip((maxPage - 1) * pageSize).Take(pageSize).ToList();
-                }
-                else
-                {
-                    return originalStudents.Skip(0).Take(pageSize).ToList();
-                }
+                totalCount = await TeachersService.GetCountByName(teacherName);
+            }
+            else
+            {
+                totalCount = await TeachersService.GetCountAllTeachers();
             }
 
-            return originalStudents.Skip(startIndex)
-                .Take(pageSize > 10 ? 10 : pageSize)    // each page total display 10 data
-                .ToList();
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            ViewBag.CurrentPage = pageNum;
+            ViewBag.PageSize = pageSize;
+
+            return paginatedTeachers;
         }
 
+
         //pagination for course
-        public IEnumerable<Courses> paginationCourse(IEnumerable<Courses> courses, int pageNum, int pageSize)
+        public async Task<TeacherCourseViewModel> paginationCourse(int teacherId, int pageNum, int pageSize)
         {
-            // Store the original students for pagination
-            var originalStudents = courses.ToList();
+            var teacher = await TeachersService.GetById(teacherId);
+            var paginatedCourses = await CourseService.GetCourseByTeacherId(teacherId, pageNum, pageSize);
+            int totalCount = 0;
 
-            int totalStudentsCount = originalStudents.Count();
-            int totalP = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
+            var viewModel = new TeacherCourseViewModel
+            {
+                Teachers = teacher.FirstOrDefault(),
+                Courses = paginatedCourses.ToList(),
+            };
 
-            ViewBag.TotalPages = totalP;
+            
+            totalCount = await CourseService.GetCountAllCoursesByTeacherId(teacherId);
+
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             ViewBag.CurrentPage = pageNum;
-            ViewBag.DisplayedStudentsCount = totalStudentsCount;
             ViewBag.PageSize = pageSize;
 
-            int startIndex = (pageNum - 1) * pageSize;
-
-            if (startIndex >= totalStudentsCount)
-            {
-                if (totalStudentsCount > 0)
-                {
-                    // Calculate the maximum possible page number based on available data
-                    int maxPage = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
-                    return originalStudents.Skip((maxPage - 1) * pageSize).Take(pageSize).ToList();
-                }
-                else
-                {
-                    return originalStudents.Skip(0).Take(pageSize).ToList();
-                }
-            }
-
-            return originalStudents.Skip(startIndex)
-                .Take(pageSize > 10 ? 10 : pageSize)    // each page total display 10 data
-                .ToList();
+            return viewModel;
         }
     }
 }

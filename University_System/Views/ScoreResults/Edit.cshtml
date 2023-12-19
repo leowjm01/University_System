@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-info" role="alert" style="color: red">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <h1>Edit Score Result Details</h1>
 <hr />
@@ -23,7 +29,7 @@
             </div>
             <div class="form-group" style="padding-bottom: 20px">
                 <label class="control-label" style="padding-bottom: 3px"><strong>Student Name</strong></label>
-                <select asp-for="studentId" class="form-control" class="form-control  form-select-sm form-select" asp-items="ViewBag.studentId" style="height:40px"></select>
+                <select asp-for="studentId" class="form-control  form-select-sm form-select" asp-items="ViewBag.studentId" style="height:40px"></select>
                 <span asp-validation-for="studentId" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -1,9 +1,8 @@
-﻿@model UniSystemTest.Models.TeacherCourseViewModel
+﻿@model UniSystemTest.Models.StudentScoreResultViewModel
 
 @{
-    ViewData["Title"] = "TeacherDetails";
+    ViewData["Title"] = "StudentDetails";
 }
-
 
 @functions {
     public string GetGender(bool isMale)
@@ -12,36 +11,36 @@
     }
 }
 
-<h1>Teacher Details</h1>
+<h1>Student Details</h1>
 <hr />
 <br />
 <div>
     <dl class="row" style="font-size: 20px">
         <dt class="col-sm-2">
-            <strong>Teacher Name </strong>
+            <strong>Student Name </strong>
         </dt>
         <dd class="col-sm-10">
-            :  <strong>@Html.DisplayFor(model => model.Teachers.teacherName) </strong>
+            :  <strong>@Html.DisplayFor(model => model.Students.studentName) </strong>
         </dd>
 
         <dt class="col-sm-2">
-            <strong>Teacher Email </strong>
+            <strong>Student Email </strong>
         </dt>
         <dd class="col-sm-10">
-            :  <strong>@Html.DisplayFor(model => model.Teachers.email) </strong>
+            :  <strong>@Html.DisplayFor(model => model.Students.email) </strong>
         </dd>
 
         <dt class="col-sm-2">
             <strong>Gender </strong>
         </dt>
         <dd class="col-sm-10">
-            :  <strong>@GetGender(Model.Teachers.gender) </strong>
+            :  <strong>@GetGender(Model.Students.gender) </strong>
         </dd>
     </dl>
 
-    <h1 style="padding-top:20px">Course Lists</h1>
+    <h1 style="padding-top:20px">Exam Result</h1>
     <hr />
-    @if (!Model.Courses.Any())
+    @if (!Model.ScoreResults.Any())
     {
         <div class="text-center mt-5">
             <p style="font-size: 35px; color: red; margin-top: 30px">No data available</p>
@@ -54,28 +53,34 @@
             <thead>
                 <tr>
                     <th>
-                        Course Name
+                        Student Name
                     </th>
                     <th>
-                        Teacher Name
+                        Course
                     </th>
                     <th>
-                        Teacher Email
+                        Mark
+                    </th>
+                    <th>
+                        Grade
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var course in Model.Courses)
+                @foreach (var result in Model.ScoreResults)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => course.courseName)
+                            @Html.DisplayFor(modelItem => result.Students.studentName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => course.Teachers.teacherName)
+                            @Html.DisplayFor(modelItem => result.Courses.courseName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => course.Teachers.email)
+                            @(result.mark == null ? " NIL " : @Html.DisplayFor(modelItem => result.mark))
+                        </td>
+                        <td>
+                            @(result.grade == null ? " NIL " : @Html.DisplayFor(modelItem => result.grade))
                         </td>
                     </tr>
                 }
@@ -85,8 +90,6 @@
 
 </div>
 
-
-@* pagination  *@
 <div class="d-flex justify-content-center">
     @if (ViewBag.TotalPages > 1)
     {
@@ -94,28 +97,27 @@
             @if (ViewBag.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="Teachers" asp-action="TeacherDetails" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+                    <a class="page-link" asp-controller="Students" asp-action="Details" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
                 </li>
             }
 
             @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
                 <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-controller="Teachers" asp-action="TeacherDetails" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                    <a class="page-link" asp-controller="Students" asp-action="Details" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
                 </li>
             }
 
             @if (ViewBag.CurrentPage < ViewBag.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="Teachers" asp-action="TeacherDetails" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Next</a>
+                    <a class="page-link" asp-controller="Students" asp-action="Details" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Next</a>
                 </li>
             }
         </ul>
     }
 </div>
 
-
 <div style="padding-top: 20px">
-    <a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Teachers.teacherId" class="btn btn-primary">Back</a>
+    <a asp-controller="ScoreResults" asp-action="Details" asp-route-id="@Model.Students.studentId" class="btn btn-primary">Back</a>
 </div>

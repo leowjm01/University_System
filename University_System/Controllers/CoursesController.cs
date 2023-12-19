@@ -130,7 +130,6 @@ namespace University_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         //pagination
         public async Task<IEnumerable<Courses>> pagination(string courseName, int pageNum, int pageSize)
         {

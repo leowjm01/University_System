@@ -32,7 +32,8 @@ namespace University_System.Reposibility
                     Courses = new Courses
                     {
                         courseId = RSC.courseId,
-                        courseName = RSC.courseName
+                        courseName = RSC.courseName,
+                        IsDeleted = RSC.isDeleted,
                     },
                     Students = new Students
                     {
@@ -69,7 +70,8 @@ namespace University_System.Reposibility
                     Courses = new Courses
                     {
                         courseId = RSC.courseId,
-                        courseName = RSC.courseName
+                        courseName = RSC.courseName,
+                        IsDeleted = RSC.isDeleted
                     },
                     Students = new Students
                     {
@@ -98,12 +100,14 @@ namespace University_System.Reposibility
             return result;
         }
 
-        public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id)
+        public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize)
         {
-            var param = new SqlParameter("@studentId", id);
-
             var resultStudentCourse = await _dbContext.ResultStudentCourse
-                .FromSqlRaw(@"exec GetScoreResultByStudentId @studentId", param).ToListAsync();
+                .FromSqlRaw("exec GetAllScoreResultByStudentId @StudentId, @PageNum, @PageSize",
+                    new SqlParameter("@StudentId", id),
+                    new SqlParameter("@PageNum", pageNum),
+                    new SqlParameter("@PageSize", pageSize))
+                .ToListAsync();
 
             var results = new List<ScoreResults>();
 
@@ -119,7 +123,8 @@ namespace University_System.Reposibility
                     Courses = new Courses
                     {
                         courseId = RSC.courseId,
-                        courseName = RSC.courseName
+                        courseName = RSC.courseName,
+                        IsDeleted = RSC.isDeleted
                     },
                     Students = new Students
                     {
@@ -157,7 +162,8 @@ namespace University_System.Reposibility
                     Courses = new Courses
                     {
                         courseId = RSC.courseId,
-                        courseName = RSC.courseName
+                        courseName = RSC.courseName,
+                        IsDeleted = RSC.isDeleted
                     },
                     Students = new Students
                     {
@@ -171,6 +177,17 @@ namespace University_System.Reposibility
             }
 
             return (results);
+        }
+
+        public async Task<int> GetCountAllScoreResultByStudentId(int id)
+        {
+            var param = new SqlParameter("@studentId", id);
+
+            var results = await _dbContext.ScoreResults
+                .FromSqlRaw(@"exec GetScoreResultListByStudentId @studentId", param)
+                .ToListAsync();
+
+            return results.Count();
         }
 
         public async Task<int> GetCountAllScoreResults()
@@ -260,6 +277,14 @@ namespace University_System.Reposibility
 
             return await Task.Run(() => _dbContext.Database
             .ExecuteSqlRawAsync(@"exec DeleteScoreResult @scoreResultId", param));
+        }
+
+        public async Task<int> DeleteByStudentId(int id)
+        {
+            var param = new SqlParameter("@studentId", id);
+
+            return await Task.Run(() => _dbContext.Database
+            .ExecuteSqlRawAsync(@"exec DeleteScoreResultByStudentId @studentId", param));
         }
     }
 }

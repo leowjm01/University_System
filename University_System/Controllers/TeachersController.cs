@@ -66,24 +66,6 @@ namespace University_System.Controllers
         // GET: Teachers/Details
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 10)
         {
-            //var teacher = await TeachersService.GetById(id);
-            //var course = await CourseService.GetCourseByTeacherId(id, pageNum, pageSize);
-
-            //if (teacher == null || course == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var viewModel = new TeacherCourseViewModel
-            //{
-            //    Teachers = teacher.FirstOrDefault(),
-            //    Courses = course.ToList(),
-            //};
-
-            //viewModel.Courses = paginationCourse(viewModel.Courses, pageNum, pageSize).ToList();
-
-
-            //return View(viewModel);
             var viewModel = await paginationCourse(id, pageNum, pageSize);
 
             return View(viewModel);
@@ -91,7 +73,7 @@ namespace University_System.Controllers
 
 
         // GET: TeachersDetails
-        public async Task<IActionResult> TeacherDetails(int id, int pageNum = 1, int pageSize = 10)
+        public async Task<IActionResult> TeacherDetails(int id, int pageNum = 1, int pageSize = 5)
         {
 
             var viewModel = await paginationCourse(id, pageNum, pageSize);
@@ -157,6 +139,15 @@ namespace University_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var count = await CourseService.GetCountAllCoursesByTeacherId(id);
+
+            if (count > 1 ) 
+            {
+                //alert message
+                TempData["ErrorMessage"] = "Delete failed. This is because that have couses handle by the teacher !!";
+                return RedirectToAction(nameof(Delete));
+            }
+
             await TeachersService.Delete(id);
             //alert message
             TempData["SuccessMessage"] = "Delete successful";

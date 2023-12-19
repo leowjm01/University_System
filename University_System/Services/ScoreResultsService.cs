@@ -27,19 +27,26 @@ namespace University_System.Services
             return (await _reponsitory.CheckCourseSelected(scoreResultId, studentId, courseId));
         }
 
-        public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id)
+        public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize)
         {
-            return (await _reponsitory.GetScoreResultByStudentId(id));
+            return (await _reponsitory.GetScoreResultByStudentId(id, pageNum, pageSize));
         }
 
         public async Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize)
         {
             return (await _reponsitory.GetPagedScoreResults(studentName, pageNum, pageSize));
         }
+
+        public async Task<int> GetCountAllScoreResultByStudentId(int id)
+        {
+            return (await _reponsitory.GetCountAllScoreResultByStudentId(id));
+        }
+
         public async Task<int> GetCountAllScoreResults()
         {
             return (await _reponsitory.GetCountAllScoreResults());
         }
+
         public async Task<int> GetCountByStudentName(string name)
         {
             return (await _reponsitory.GetCountByStudentName(name));
@@ -52,7 +59,7 @@ namespace University_System.Services
 
         public async Task<int> Add(ScoreResults result, int examSelected)
         {
-            examSelected += result.mark == null || result.mark < 50 ? 1: -1;
+            examSelected = result.mark == null || result.mark < 50 ? examSelected + 1: examSelected;
 
 
             checkGrade(result);
@@ -76,6 +83,11 @@ namespace University_System.Services
         public async Task<int> Delete(int id) 
         {
             return (await _reponsitory.Delete(id)); 
+        }
+
+        public async Task<int> DeleteByStudentId(int id)
+        {
+            return (await _reponsitory.DeleteByStudentId(id));
         }
 
         //Check the grade of score results

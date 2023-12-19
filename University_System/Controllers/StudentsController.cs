@@ -64,28 +64,24 @@ namespace University_System.Controllers
 
 
         // GET: Students/Details
-        public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 10)
+        public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 5)
         {
 
-            var student = await Studentservice.GetById(id);
-            var result = await ScoreResultsservice.GetScoreResultByStudentId(id);
-
-            if (student == null || result == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = new StudentScoreResultViewModel
-            {
-                Students = student.FirstOrDefault(),
-                ScoreResults = result.ToList(),
-            };
-
-            viewModel.ScoreResults = paginationScoreResult(viewModel.ScoreResults, pageNum, pageSize).ToList();
-
+            var viewModel = await paginationScoreResult(id, pageNum, pageSize);
 
             return View(viewModel);
         }
+
+        // GET: Students/TeacherDetails
+        public async Task<IActionResult> StudentDetails(int id, int pageNum = 1, int pageSize = 5)
+        {
+
+            var viewModel = await paginationScoreResult(id, pageNum, pageSize);
+
+            return View(viewModel);
+        }
+
+
 
         // GET: Students/Edit
         public async Task<IActionResult> Edit(int id)
@@ -146,6 +142,7 @@ namespace University_System.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await Studentservice.Delete(id);
+            await ScoreResultsservice.DeleteByStudentId(id);
             //alert message
             TempData["SuccessMessage"] = "Delete successful";
             return RedirectToAction(nameof(Index));
@@ -175,38 +172,26 @@ namespace University_System.Controllers
         }
 
         //pagination for course
-        public IEnumerable<ScoreResults> paginationScoreResult(IEnumerable<ScoreResults> result, int pageNum, int pageSize)
+        public async Task<StudentScoreResultViewModel> paginationScoreResult(int studentId, int pageNum, int pageSize)
         {
-            // Store the original students for pagination
-            var originalStudents = result.ToList();
+            var students = await Studentservice.GetById(studentId);
+            var paginatedResult = await ScoreResultsservice.GetScoreResultByStudentId(studentId, pageNum, pageSize);
+            int totalCount = 0;
 
-            int totalStudentsCount = originalStudents.Count();
-            int totalP = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
+            var viewModel = new StudentScoreResultViewModel
+            {
+                Students = students.FirstOrDefault(),
+                ScoreResults = paginatedResult.ToList(),
+            };
 
-            ViewBag.TotalPages = totalP;
+
+            totalCount = await ScoreResultsservice.GetCountAllScoreResultByStudentId(studentId);
+
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             ViewBag.CurrentPage = pageNum;
-            ViewBag.DisplayedStudentsCount = totalStudentsCount;
             ViewBag.PageSize = pageSize;
 
-            int startIndex = (pageNum - 1) * pageSize;
-
-            if (startIndex >= totalStudentsCount)
-            {
-                if (totalStudentsCount > 0)
-                {
-                    // Calculate the maximum possible page number based on available data
-                    int maxPage = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
-                    return originalStudents.Skip((maxPage - 1) * pageSize).Take(pageSize).ToList();
-                }
-                else
-                {
-                    return originalStudents.Skip(0).Take(pageSize).ToList();
-                }
-            }
-
-            return originalStudents.Skip(startIndex)
-                .Take(pageSize > 10 ? 10 : pageSize)    // each page total display 10 data
-                .ToList();
+            return viewModel;
         }
     }
 }

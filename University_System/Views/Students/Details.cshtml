@@ -90,6 +90,34 @@
 
 </div>
 
+<div class="d-flex justify-content-center">
+    @if (ViewBag.TotalPages > 1)
+    {
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Students" asp-action="Details" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Students" asp-action="Details" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Students" asp-action="Details" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Next</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
 <div style="padding-top: 20px">
     <a asp-action="Index" class="btn btn-primary">Back</a>
 </div>

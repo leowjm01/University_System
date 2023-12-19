@@ -47,8 +47,9 @@ namespace University_System.Services
         Task<IEnumerable<ScoreResults>> GetAll();                                                                   // retrive all score results data
         Task<IEnumerable<ScoreResults>> GetById(int id);                                                            // get score result data by score result id
         Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId);       // Check couse repeated by student selected
-        Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id);                                          // get score result by student Id
-        Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize);             // pagination and search function
+        Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize);              // get score result by student Id
+        Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize);        // pagination and search function
+        Task<int> GetCountAllScoreResultByStudentId(int id);                                                       // count all score result by student id
         Task<int> GetCountAllScoreResults();                                                                        // count all score result
         Task<int> GetCountByStudentName(string name);                                                               // cont total score result by student name
         Task<int> GetExamSelectedByStudentId(int id);                                                               // get exam selected by student id
@@ -56,6 +57,7 @@ namespace University_System.Services
         Task<int> Update(ScoreResults results, int examSelect);                                                     // update score result details
         Task<int> UpdateExamSelected(int studentId, int examSelect);                                                // update exame selected in student database
         Task<int> Delete(int id);                                                                                   // delete 
+        Task<int> DeleteByStudentId(int id);                                                                        // delete by student id
 
     }
 }

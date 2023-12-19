@@ -78,8 +78,8 @@ namespace University_System.Reposibility
         {
 
             var CourseTeacher = await _dbContext.CoursesTeachers
-                    .FromSqlRaw("exec GetCourseByTeacherId @teacherId, @PageNum, @PageSize",
-                        new SqlParameter("@CourseName", id),
+                    .FromSqlRaw("exec GetAllCourseByTeacherId @TeacherId, @PageNum, @PageSize",
+                        new SqlParameter("@TeacherId", id),
                         new SqlParameter("@PageNum", pageNum),
                         new SqlParameter("@PageSize", pageSize))
                     .ToListAsync();

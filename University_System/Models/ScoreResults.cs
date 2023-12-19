@@ -38,6 +38,7 @@ namespace UniSystemTest.Models
         //courses Object data
         public int courseId { get; set; }
         public string? courseName { get; set; } = null!;
+        public bool isDeleted { get; set; }
 
         //ScoreResults Object data
         public int scoreResultId { get; set; }

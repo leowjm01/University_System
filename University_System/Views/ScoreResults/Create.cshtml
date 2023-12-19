@@ -4,6 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-info" role="alert" style="color: red">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <h1>Create New Score Result </h1>
 <hr />
 <br />

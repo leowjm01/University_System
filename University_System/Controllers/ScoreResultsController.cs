@@ -50,18 +50,36 @@ namespace University_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("scoreResultId,mark,grade,courseId,studentId")] ScoreResults scoreResults)
         {
+            //Chech there same course and student in database
+            var check = await ScoreResultsService.CheckCourseSelected(scoreResults.scoreResultId, scoreResults.studentId, scoreResults.courseId);
+            if (!check.IsNullOrEmpty())
+            {
+                ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", scoreResults.courseId);
+                ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", scoreResults.studentId);
 
-            await CheckCourseSelected(scoreResults.scoreResultId, scoreResults.studentId, scoreResults.courseId);
+                TempData["ErrorMessage"] =  "Course already selected before. Please try select another course.....";
+                return View(scoreResults);
+            }
 
+            //check quantity of selected Exam 
+            var getExamSelected = await ScoreResultsService.GetExamSelectedByStudentId(scoreResults.studentId);
+            if (getExamSelected >= 10)
+            {
+                ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", scoreResults.courseId);
+                ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", scoreResults.studentId);
+                TempData["ErrorMessage"] =  "Student already select 10 subject. Cannot select more already!!! ";
+                return View(scoreResults);
+            }
+
+            // add new score result
             if (ModelState.IsValid)
             {
-               
-                var getExamSelected = await CheckExamSelected(scoreResults.studentId, scoreResults.courseId);
-
                 //add new score result
                 await ScoreResultsService.Add(scoreResults, getExamSelected);
+                TempData["SuccessMessage"] =  "Score result create successful";
                 return RedirectToAction(nameof(Index));
             }
+
             return View(scoreResults);
         }
 
@@ -89,6 +107,7 @@ namespace University_System.Controllers
             {
                 return NotFound();
             }
+
             ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", result.First().courseId);
             ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", result.First().studentId);
 
@@ -100,48 +119,58 @@ namespace University_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("scoreResultId,mark,grade,courseId,studentId")] ScoreResults scoreResults)
         {
-            await CheckCourseSelected(scoreResults.scoreResultId, scoreResults.studentId, scoreResults.courseId);
 
-            if (id != scoreResults.scoreResultId)
+            //Chech there same course and student in the score result data
+            var check = await ScoreResultsService.CheckCourseSelected(scoreResults.scoreResultId, scoreResults.studentId, scoreResults.courseId);
+            if (!check.IsNullOrEmpty())
             {
-                return NotFound();
+                ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", scoreResults.courseId);
+                ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", scoreResults.studentId);
+
+                TempData["ErrorMessage"] =  "Course already selected before. Please try select another course.....";
+                return View(scoreResults);
             }
 
             if (ModelState.IsValid)
             {    
-                
                 var result = await ScoreResultsService.GetById(id);
 
-                //check update data with same student
-               var isUpdate =  await CheckScoreResultsBySameSelect(scoreResults, result.First().studentId);
-
+                //check update data is same student
+               var isUpdate =  await CheckScoreResultsBySameSelect(scoreResults, result.First().studentId, Convert.ToDecimal(result.First().mark));
                 if (isUpdate != true)
                 {
+                    var getSelectedExam = await ScoreResultsService.GetExamSelectedByStudentId(scoreResults.studentId);
 
-                    //check the student before edit
-                    
-                    var getSelectExamBefore = await CheckExamSelected(result.First().studentId, scoreResults.courseId);
-                    getSelectExamBefore = result.First().mark == null || result.First().mark  < 50 ? getSelectExamBefore - 1 : getSelectExamBefore;
-                    getSelectExamBefore = getSelectExamBefore == -1 ? 0 : getSelectExamBefore;
+                    if (getSelectedExam < 10)
+                    {
+                        //check the student before edit
+                        var getSelectExamBefore = await ScoreResultsService.GetExamSelectedByStudentId(result.First().studentId);
+                        getSelectExamBefore = result.First().mark == null || result.First().mark  < 50 ? getSelectExamBefore - 1 : getSelectExamBefore;
 
-                    //check the student edited already
-                    var getExamSelectedNow = await CheckExamSelected(scoreResults.studentId, scoreResults.courseId);
-                    getExamSelectedNow = scoreResults.mark == null || scoreResults.mark < 50 ? getExamSelectedNow + 1 : getExamSelectedNow;
-                    getExamSelectedNow = getExamSelectedNow == getExamSelectedNow - 1 ? 0 : getExamSelectedNow;
+                        //check the student edited already
+                        getSelectedExam = scoreResults.mark == null || scoreResults.mark < 50 ? getSelectedExam + 1 : getSelectedExam;
 
-                    //update the exam selected that the student before edit
-                    await ScoreResultsService.UpdateExamSelected(result.First().studentId, getSelectExamBefore);
+                        //update the exam selected that the student before edit
+                        await ScoreResultsService.UpdateExamSelected(result.First().studentId, getSelectExamBefore);
 
-                    //update data and update the exam selected that student edited
-                    await ScoreResultsService.Update(scoreResults, getExamSelectedNow);
+                        //update data and update the exam selected that student edited
+                        await ScoreResultsService.Update(scoreResults, getSelectedExam);
+
+                        TempData["SuccessMessage"] =  "Edit score result successful";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else 
+                    {
+                        ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", scoreResults.courseId);
+                        ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", scoreResults.studentId);
+                        TempData["ErrorMessage"] =  "Student already select 10 subject. Cannot select more already!!!";
+                        return View(scoreResults);
+                    }
                 }
-                return RedirectToAction(nameof(Index));
             }
 
-
-            ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", scoreResults.courseId);
-            ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", scoreResults.studentId);
-            return View(scoreResults);
+            TempData["SuccessMessage"] =  "Edit score result successful";
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -179,60 +208,37 @@ namespace University_System.Controllers
         }
 
 
-
-        public async Task<bool> CheckScoreResultsBySameSelect(ScoreResults scoreResults, int studentIdNow)
+        //check update data is same student
+        public async Task<bool> CheckScoreResultsBySameSelect(ScoreResults scoreResults, int studentIdNow, decimal markBefore)
         {
 
             // check the user is edit the same studentid and course
             if (scoreResults.studentId ==  studentIdNow)
             {
                 //check the student edited already
-                var getExamSelected = await CheckExamSelected(studentIdNow, scoreResults.courseId);
+                var getExamSelected = await ScoreResultsService.GetExamSelectedByStudentId(studentIdNow);
 
                 // add or decrease the quantity of selected result
-                getExamSelected = scoreResults.mark == null || scoreResults.mark < 50 ? getExamSelected + 1 : getExamSelected - 1;
-                getExamSelected = getExamSelected == getExamSelected - 1 ? 0 : getExamSelected;
+                if (markBefore >= 50)
+                {
+                    getExamSelected = scoreResults.mark == null || scoreResults.mark < 50 ? getExamSelected + 1 : getExamSelected;
+                }
+                else if (markBefore == 0)
+                {
+                    getExamSelected = scoreResults.mark == null || scoreResults.mark < 50 ? getExamSelected : getExamSelected - 1;
+                    getExamSelected = getExamSelected == -1 ? 0 : getExamSelected;
+                }
+                else 
+                {
+                    getExamSelected = scoreResults.mark == null || scoreResults.mark < 50 ? getExamSelected : getExamSelected - 1;
+                    getExamSelected = getExamSelected == -1 ? 0 : getExamSelected;
+                }
 
                 await ScoreResultsService.Update(scoreResults, getExamSelected);
                 return true;
             }
             return false;
         }
-
-
-        //check quantity exam selected by student
-        public async Task<int> CheckExamSelected(int studentId, int courseId) 
-        {
-            var getExamSelected = await ScoreResultsService.GetExamSelectedByStudentId(studentId);
-
-            // check the select exam is more than 10 or not
-            if (getExamSelected >= 10)
-            {
-                ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", courseId);
-                ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", studentId);
-                RedirectToAction(nameof(Create));
-            }
-
-            return getExamSelected;
-        }
-
-        //check the repeated course student selected
-        public async Task CheckCourseSelected(int? scoreResultId, int studentId, int courseId) 
-        {
-
-            var check = await ScoreResultsService.CheckCourseSelected(scoreResultId, studentId, courseId);
-
-            //check the student that have select two same course or not
-            if (!check.IsNullOrEmpty())
-            {
-                ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", courseId);
-                ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", studentId);
-
-                ModelState.AddModelError("courseId", "Course already selected before. Please try select another course.....");
-                RedirectToAction(nameof(Create));
-            }
-        }
-
 
         //pagination
         public async Task<IEnumerable<ScoreResults>> pagination(string studentName, int pageNum, int pageSize)
@@ -255,42 +261,6 @@ namespace University_System.Controllers
             ViewBag.PageSize = pageSize;
 
             return paginatedScoreResult;
-        }
-
-
-        //pagination
-        public IEnumerable<ScoreResults> pagination(IEnumerable<ScoreResults> results, int pageNum, int pageSize)
-        {
-            // Store the original students for pagination
-            var originalStudents = results.ToList();
-
-            int totalStudentsCount = originalStudents.Count();
-            int totalP = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
-
-            ViewBag.TotalPages = totalP;
-            ViewBag.CurrentPage = pageNum;
-            ViewBag.DisplayedStudentsCount = totalStudentsCount;
-            ViewBag.PageSize = pageSize;
-
-            int startIndex = (pageNum - 1) * pageSize;
-
-            if (startIndex >= totalStudentsCount)
-            {
-                if (totalStudentsCount > 0)
-                {
-                    // Calculate the maximum possible page number based on available data
-                    int maxPage = (int)Math.Ceiling(totalStudentsCount / (double)pageSize);
-                    return originalStudents.Skip((maxPage - 1) * pageSize).Take(pageSize).ToList();
-                }
-                else
-                {
-                    return originalStudents.Skip(0).Take(pageSize).ToList();
-                }
-            }
-
-            return originalStudents.Skip(startIndex)
-                .Take(pageSize > 10 ? 10 : pageSize)    // each page total display 10 data
-                .ToList();
         }
     }
 }

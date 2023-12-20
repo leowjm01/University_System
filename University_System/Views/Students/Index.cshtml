@@ -38,63 +38,65 @@
         </p>
     </div>
     <div class="col-md-6 text-end">
-        <form method="get" action="@Url.Action("Index", "Students")">
+        <form id="searchForm" method="get" action="@Url.Action("Index", "Students")">
             <div class="input-group">
-                <input type="text" id="studentName" name="studentName" class="form-control" placeholder="Search by Student Name" aria-label="Search by Student Name" aria-describedby="button-addon2">
+                <input type="text" id="studentName" name="studentName" value="@ViewBag.StudentName" class="form-control" placeholder="Search by Student Name" aria-label="Search by Student Name" aria-describedby="button-addon2">
                 <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
             </div>
         </form>
     </div>
 </div>
 
-@if (!Model.Any())
-{
-    <div class="text-center mt-5">
-        <p style="font-size: 35px; color: red; margin-top: 30px">No data available</p>
-    </div>
-}
-else
-{
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                Student Name
-            </th>
-            <th>
-                Gender
-            </th>
-            <th>
-                Email
-            </th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-            @foreach (var item in Model)
-            {
+    @if (!Model.Any())
+    {
+        <div class="text-center mt-5">
+            <p style="font-size: 35px; color: red; margin-top: 30px">No data available</p>
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.studentName)
-                    </td>
-                    <td>
-                        @GetGender(item.gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.email)
-                    </td>
-                    <td>
-                        @{var encryptedStudentId = EncryptStudentId(item.studentId);}
-                        <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Details" asp-route-id="@encryptedStudentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
-                    </td>
+                    <th>
+                        Student Name
+                    </th>
+                    <th>
+                        Gender
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>Action</th>
                 </tr>
-            }
-       
-    </tbody>
-</table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.studentName)
+                        </td>
+                        <td>
+                            @GetGender(item.gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>
+                        <td>
+                            @{
+                                var encryptedStudentId = EncryptStudentId(item.studentId);
+                            }
+                            <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@encryptedStudentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
 
 <div class="d-flex justify-content-center">
     @if (ViewBag.TotalPages > 1)

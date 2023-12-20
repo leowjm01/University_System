@@ -24,7 +24,7 @@
     <div class="col-md-6 text-end">
         <form method="get" action="@Url.Action("Index", "ScoreResults")">
             <div class="input-group">
-                <input type="text" id="studentName" name="studentName" class="form-control" placeholder="Search by Student Name" aria-label="Search by student Name" aria-describedby="button-addon2">
+                <input type="text" id="studentName" name="studentName" value="@ViewData["StudentName"]" class="form-control" placeholder="Search by Student Name" aria-label="Search by student Name" aria-describedby="button-addon2">
                 <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
             </div>
         </form>
@@ -145,3 +145,17 @@ else
         </ul>
     }
 </div>
+
+@section Scripts {
+    <script>
+        let debounceTimer;
+
+        document.getElementById('studentName').addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 1000);
+        });
+    </script>
+}

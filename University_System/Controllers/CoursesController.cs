@@ -71,6 +71,20 @@ namespace University_System.Controllers
             return View(course.FirstOrDefault());
         }
 
+        // GET: Courses/DetailsFromTeacher
+        //public async Task<IActionResult> GetDetailsFromTeacher(int id)
+        //{
+        //    var course = await CoursesService.GetByTeacherId(id);
+
+        //    if (course == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(course.FirstOrDefault());
+        //}
+
+
 
         // GET: Courses/Edit
         public async Task<IActionResult> Edit(int id)

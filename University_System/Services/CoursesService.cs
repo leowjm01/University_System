@@ -20,6 +20,10 @@ namespace University_System.Services
         {
             return (await _reponsitory.GetById(id));
         }
+        public async Task<IEnumerable<Courses>> GetCourseByStudentId(int id)
+        {
+            return (await _reponsitory.GetCourseByStudentId(id));
+        }
         public async Task<IEnumerable<Courses>> GetCourseByTeacherId(int id, int pageNum, int pageSize)
         {
             return (await _reponsitory.GetCourseByTeacherId(id, pageNum, pageSize));

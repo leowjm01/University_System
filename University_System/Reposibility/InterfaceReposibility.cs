@@ -32,6 +32,7 @@ namespace University_System.Reposibility
     {
         Task<IEnumerable<Courses>> GetAll();                                                                    // retrive all course data
         Task<IEnumerable<Courses>> GetById(int id);                                                             // get courses by course Id
+        Task<IEnumerable<Courses>> GetCourseByStudentId(int id);                                                // get where course No exit in score result
         Task<IEnumerable<Courses>> GetCourseByTeacherId(int id, int pageNum, int pageSize);                     // get courses by teacher Id
         Task<IEnumerable<Courses>> GetPagedCourses(string courseName, int pageNum, int pageSize);               // pagination and search function
         Task<int> GetCountAllCoursesByTeacherId(int id);                                                        // count all course by teacher id

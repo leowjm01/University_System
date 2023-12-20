@@ -74,6 +74,16 @@ namespace University_System.Reposibility
             return courses;
         }
 
+        public async Task<IEnumerable<Courses>> GetCourseByStudentId(int id)
+        {
+            var param = new SqlParameter("@studentId", id);
+
+            var course = await Task.Run(() => _dbContext.Courses
+                .FromSqlRaw(@"exec GetCourseByStudentId @studentId", param).ToListAsync());
+
+            return course;
+        }
+
         public async Task<IEnumerable<Courses>> GetCourseByTeacherId(int id, int pageNum, int pageSize)
         {
 

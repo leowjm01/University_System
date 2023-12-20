@@ -24,29 +24,29 @@ namespace University_System.Controllers
             return View();
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
-
-
-        [Route("Home/Error")]
-        public IActionResult Error(int? statusCode)
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
         {
-            switch (statusCode)
-            {
-                case 400:
-                    return View("Error400");
-                case 404:
-                    return View("Error404");
-                case 500:
-                    return View("Error500");
-                case 503:
-                    return View("Error502");
-            }
-
-            return View("Error");
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+        //[Route("Home/Error")]
+        //public IActionResult Error(int? statusCode)
+        //{
+        //    switch (statusCode)
+        //    {
+        //        case 400:
+        //            return View("Error400");
+        //        case 404:
+        //            return View("Error404");
+        //        case 500:
+        //            return View("Error500");
+        //        case 503:
+        //            return View("Error502");
+        //    }
+
+        //    return View("Error");
+        //}
     }
 }

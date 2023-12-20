@@ -31,6 +31,7 @@ namespace University_System.Services
     {
         Task<IEnumerable<Courses>> GetAll();                                                                    // retrive all course data
         Task<IEnumerable<Courses>> GetById(int id);                                                             // get courses by course Id
+        Task<IEnumerable<Courses>> GetCourseByStudentId(int id);                                               // get where course No exit in score result
         Task<IEnumerable<Courses>> GetCourseByTeacherId(int id, int pageNum, int pageSize);                     // get courses by teacher Id
         Task<IEnumerable<Courses>> GetPagedCourses(string courseName, int pageNum, int pageSize);               // pagination and search function
         Task<int> GetCountAllCoursesByTeacherId(int id);                                                        // count all course by teacher id
@@ -47,9 +48,9 @@ namespace University_System.Services
         Task<IEnumerable<ScoreResults>> GetAll();                                                                   // retrive all score results data
         Task<IEnumerable<ScoreResults>> GetById(int id);                                                            // get score result data by score result id
         Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId);       // Check couse repeated by student selected
-        Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize);              // get score result by student Id
+        Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize);               // get score result by student Id
         Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize);        // pagination and search function
-        Task<int> GetCountAllScoreResultByStudentId(int id);                                                       // count all score result by student id
+        Task<int> GetCountAllScoreResultByStudentId(int id);                                                        // count all score result by student id
         Task<int> GetCountAllScoreResults();                                                                        // count all score result
         Task<int> GetCountByStudentName(string name);                                                               // cont total score result by student name
         Task<int> GetExamSelectedByStudentId(int id);                                                               // get exam selected by student id

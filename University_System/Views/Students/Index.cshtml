@@ -9,7 +9,15 @@
     {
         return isMale ? "Male" : "Female";
     }
+
+    public string EncryptStudentId(int? studentId)
+    {
+        var encryptedData = System.Text.Encoding.UTF8.GetBytes(studentId.ToString());
+
+        return Convert.ToBase64String(encryptedData);
+    }
 }
+
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -76,8 +84,9 @@ else
                         @Html.DisplayFor(modelItem => item.email)
                     </td>
                     <td>
+                        @{var encryptedStudentId = EncryptStudentId(item.studentId);}
                         <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.studentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
+                        <a asp-action="Details" asp-route-id="@encryptedStudentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
@@ -118,4 +127,18 @@ else
         </ul>
     }
 </div>
+
+@section Scripts{
+    <script>
+        let debounceTimer;
+
+        document.getElementById('studentName').addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 1000); 
+        });
+    </script>
+}
  

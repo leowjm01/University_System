@@ -27,12 +27,12 @@ namespace University_System.Controllers
         // GET: Students
         public async Task<IActionResult> Index(string studentName, int pageNum = 1, int pageSize = 10)
         {
-
             var paginatedStudents = await pagination(studentName, pageNum, pageSize);
             ViewData["StudentName"] = studentName;
 
             return View(paginatedStudents);
         }
+
 
         // GET: Students/Create
         public IActionResult Create()
@@ -65,7 +65,6 @@ namespace University_System.Controllers
 
 
         // GET: Students/Details
-        [Route("Students/Details")]
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 5)
         {
 

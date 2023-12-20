@@ -29,6 +29,7 @@ namespace University_System.Controllers
         {
 
             var paginatedCourses = await pagination(courseName, pageNum, pageSize);
+            ViewData["CourseName"] = courseName;
 
             return View(paginatedCourses);
         }
@@ -50,6 +51,7 @@ namespace University_System.Controllers
             if (ModelState.IsValid)
             {
                 await CoursesService.Add(courses);
+                TempData["SuccessMessage"] =  "Create course successful";
                 return RedirectToAction(nameof(Index));
             }
             return View(courses);
@@ -100,6 +102,7 @@ namespace University_System.Controllers
             if (ModelState.IsValid)
             {
                 await CoursesService.Update(courses);
+                TempData["SuccessMessage"] =  "Edit course successful";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -127,6 +130,7 @@ namespace University_System.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await CoursesService.Delete(id);
+            TempData["SuccessMessage"] =  "Delete course successful";
             return RedirectToAction(nameof(Index));
         }
 

@@ -11,13 +11,6 @@
     </div>
 }
 
-@if (TempData["CancelMessage"] != null)
-{
-    <div class="alert alert-info" role="alert">
-        @TempData["CancelMessage"]
-    </div>
-}
-
 <h1 style="margin-bottom: 20px; ">Score Result Lists</h1>
 <hr />
 <br />
@@ -66,28 +59,52 @@ else
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                if (item.Courses.IsDeleted == true)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => item.Students.studentName)
+                            @Html.DisplayFor(modelItem => item.Students.studentName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Courses.courseName)
+                            @Html.DisplayFor(modelItem => item.Courses.courseName)
                     </td>
                     <td>
-                       @(item.mark == null ?  " NIL " : @Html.DisplayFor(modelItem => item.mark))
+                            @(item.mark == null ? " NIL " : @Html.DisplayFor(modelItem => item.mark))
                     </td>
                     <td>
-                       @(item.grade == null ? " NIL " : @Html.DisplayFor(modelItem => item.grade))
+                            @(item.grade == null ? " NIL " : @Html.DisplayFor(modelItem => item.grade))
                     </td>
                     <td>
-                        @(item.Courses.IsDeleted ? "Inactive" :" Active")
+                            @(item.Courses.IsDeleted ? "Inactive" : " Active")
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.scoreResultId" class="btn btn-primary">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.scoreResultId" class="btn btn-info" style="background-color:greenyellow">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.scoreResultId" class="btn btn-danger">Delete</a>
                     </td>
-                </tr>
+                }
+                else{
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Students.studentName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Courses.courseName)
+                        </td>
+                        <td>
+                           @(item.mark == null ?  " NIL " : @Html.DisplayFor(modelItem => item.mark))
+                        </td>
+                        <td>
+                           @(item.grade == null ? " NIL " : @Html.DisplayFor(modelItem => item.grade))
+                        </td>
+                        <td>
+                            @(item.Courses.IsDeleted ? "Inactive" :" Active")
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.scoreResultId" class="btn btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.scoreResultId" class="btn btn-info" style="background-color:greenyellow">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.scoreResultId" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
             }
 
         </tbody>
@@ -103,21 +120,26 @@ else
             @if (ViewBag.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="ScoreResults" asp-action="Index" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+                    <a class="page-link" asp-controller="ScoreResults" asp-action="Index"
+                       asp-route-pageNum="@(ViewBag.CurrentPage - 1)" asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-studentName="@ViewData["StudentName"]">Previous</a>
                 </li>
             }
 
             @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
                 <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-controller="ScoreResults" asp-action="Index" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                    <a class="page-link" asp-controller="ScoreResults" asp-action="Index" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize" 
+                    asp-route-studentName="@ViewData["StudentName"]">@i</a>
                 </li>
             }
 
             @if (ViewBag.CurrentPage < ViewBag.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="ScoreResults" asp-action="Index" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Next</a>
+                    <a class="page-link" asp-controller="ScoreResults" asp-action="Index"
+                       asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-studentName="@ViewData["StudentName"]">Next</a>
                 </li>
             }
         </ul>

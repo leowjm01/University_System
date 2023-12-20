@@ -98,7 +98,7 @@
             @if (ViewBag.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="Teachers" asp-action="Details" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+                    <a class="page-link" asp-controller="Teachers" asp-action="Details" asp-route-pageNum="@(ViewBag.CurrentPage - 1)" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
                 </li>
             }
 

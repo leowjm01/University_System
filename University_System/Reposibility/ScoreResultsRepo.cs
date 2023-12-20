@@ -214,7 +214,7 @@ namespace University_System.Reposibility
         {
             var param = new SqlParameter("@studentId", studentId);
 
-            var result = await Task.Run(() => _dbContext.ScoreResults
+            var result = await Task.Run(() => _dbContext.ResultStudentCourse
                 .FromSqlRaw(@"exec CheckExamSelected @studentId", param)
                 .ToListAsync());
 

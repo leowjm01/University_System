@@ -98,21 +98,24 @@ else
             @if (ViewBag.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="Teachers" asp-action="Index" asp-route-pageNum="1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+                    <a class="page-link" asp-controller="Teachers" asp-action="Index" asp-route-pageNum="@(ViewBag.CurrentPage - 1)" asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-teacherName="@ViewData["TeacherName"]">Previous</a>
                 </li>
             }
 
             @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
                 <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-controller="Teachers" asp-action="Index" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                    <a class="page-link" asp-controller="Teachers" asp-action="Index" asp-route-pageNum="@i" asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-teacherName="@ViewData["TeacherName"]">@i</a>
                 </li>
             }
 
             @if (ViewBag.CurrentPage < ViewBag.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="Teachers" asp-action="Index" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Next</a>
+                    <a class="page-link" asp-controller="Teachers" asp-action="Index" asp-route-pageNum="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize"
+                       asp-route-teacherName="@ViewData["TeacherName"]">Next</a>
                 </li>
             }
         </ul>

@@ -31,15 +31,22 @@ namespace University_System.Controllers
         //}
 
 
-        [Route("Error/{statusCode}")]
-        public IActionResult Error(int statusCode)
+        [Route("Home/Error")]
+        public IActionResult Error(int? statusCode)
         {
-            if (statusCode == 404)
+            switch (statusCode)
             {
-                return View("Error404"); // 返回自定义的404错误页面视图
+                case 400:
+                    return View("Error400");
+                case 404:
+                    return View("Error404");
+                case 500:
+                    return View("Error500");
+                case 503:
+                    return View("Error502");
             }
 
-            return View("Error404");
+            return View("Error");
         }
     }
 }

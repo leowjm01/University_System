@@ -28,7 +28,7 @@ namespace University_System.Controllers
         {
 
             var paginatedteachers = await pagination(teacherName, pageNum, pageSize);
-
+            ViewData["TeacherName"] = teacherName;
             return View(paginatedteachers);
         }
 
@@ -141,7 +141,7 @@ namespace University_System.Controllers
         {
             var count = await CourseService.GetCountAllCoursesByTeacherId(id);
 
-            if (count > 1 ) 
+            if (count >= 1 ) 
             {
                 //alert message
                 TempData["ErrorMessage"] = "Delete failed. This is because that have couses handle by the teacher !!";

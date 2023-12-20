@@ -30,8 +30,8 @@ namespace University_System.Controllers
         // GET: Score Result
         public async Task<IActionResult> Index(string studentName, int pageNum = 1, int pageSize = 10)
         {
-
             var paginatedScoreResults = await pagination(studentName, pageNum, pageSize);
+            ViewData["StudentName"] = studentName;
 
             return View(paginatedScoreResults);
         }
@@ -204,6 +204,7 @@ namespace University_System.Controllers
 
             //update the score result data
             await ScoreResultsService.Delete(id);
+            TempData["SuccessMessage"] =  "Delete score result successful";
             return RedirectToAction(nameof(Index));
         }
 
@@ -259,6 +260,7 @@ namespace University_System.Controllers
             ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             ViewBag.CurrentPage = pageNum;
             ViewBag.PageSize = pageSize;
+            
 
             return paginatedScoreResult;
         }

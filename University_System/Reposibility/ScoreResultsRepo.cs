@@ -18,7 +18,7 @@ namespace University_System.Reposibility
         public async Task<IEnumerable<ScoreResults>> GetAll()
         {
             var resultStudentCourse = await _dbContext.ResultStudentCourse
-                .FromSqlRaw<ResultStudentCourse>("GetResultList").ToListAsync();
+                .FromSqlRaw<ResultStudentCourse>("GetAllResults").ToListAsync();
 
             var results = new List<ScoreResults>();
 
@@ -53,7 +53,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@scoreResultId", id);
 
             var resultStudentCourse = await _dbContext.ResultStudentCourse
-                .FromSqlRaw(@"exec GetScoreResultByID @scoreResultId", param).ToListAsync();
+                .FromSqlRaw(@"exec GetScoreResultByScoreResultID @scoreResultId", param).ToListAsync();
 
 
             var results = new List<ScoreResults>();
@@ -103,7 +103,7 @@ namespace University_System.Reposibility
         public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize)
         {
             var resultStudentCourse = await _dbContext.ResultStudentCourse
-                .FromSqlRaw("exec GetAllScoreResultByStudentId @StudentId, @PageNum, @PageSize",
+                .FromSqlRaw("exec GetPaginatedScoreResultByStudentId @StudentId, @PageNum, @PageSize",
                     new SqlParameter("@StudentId", id),
                     new SqlParameter("@PageNum", pageNum),
                     new SqlParameter("@PageSize", pageSize))
@@ -184,7 +184,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@studentId", id);
 
             var results = await _dbContext.ScoreResults
-                .FromSqlRaw(@"exec GetScoreResultListByStudentId @studentId", param)
+                .FromSqlRaw(@"exec GetAllScoreResultsByStudentId @studentId", param)
                 .ToListAsync();
 
             return results.Count();
@@ -193,7 +193,7 @@ namespace University_System.Reposibility
         public async Task<int> GetCountAllScoreResults()
         {
             var results = await _dbContext.ResultStudentCourse
-             .FromSqlRaw<ResultStudentCourse>("GetResultList")
+             .FromSqlRaw<ResultStudentCourse>("GetAllResults")
              .ToListAsync();
 
             return results.Count();

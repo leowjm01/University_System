@@ -17,7 +17,16 @@ namespace University_System.Reposibility
         public async Task<IEnumerable<Students>> GetAll()
         {
             var students = await _dbContext.Students
-             .FromSqlRaw<Students>("GetStudentList")
+             .FromSqlRaw<Students>("GetAllStudents")
+             .ToListAsync();
+
+            return students;
+        }
+
+        public async Task<IEnumerable<Students>> GetAllIncludeDelete()
+        {
+            var students = await _dbContext.Students
+             .FromSqlRaw<Students>("GetAllStudentsIncludeDelete")
              .ToListAsync();
 
             return students;
@@ -28,7 +37,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@studentId", id);
 
             var result = await Task.Run(() => _dbContext.Students
-                .FromSqlRaw(@"exec GetStudentID @studentId", param)
+                .FromSqlRaw(@"exec GetStudentByStudentId @studentId", param)
                 .ToListAsync());
 
             return result;
@@ -50,7 +59,7 @@ namespace University_System.Reposibility
         public async Task<int> GetCountAllStudents()
         {
             var students = await _dbContext.Students
-             .FromSqlRaw<Students>("GetStudentList")
+             .FromSqlRaw<Students>("GetAllStudents")
              .ToListAsync();
 
             return students.Count();
@@ -61,7 +70,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@studentName", name ?? (object)DBNull.Value);
 
             var result = await Task.Run(() => _dbContext.Students
-                .FromSqlRaw(@"exec GetStudentName @studentName", param)
+                .FromSqlRaw(@"exec GetStudentByStudentName @studentName", param)
                 .ToListAsync());
 
             return result.Count();
@@ -99,7 +108,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@studentId", id);
 
             return await Task.Run(() => _dbContext.Database
-            .ExecuteSqlRawAsync(@"exec DeletedStudent @studentId", param));
+            .ExecuteSqlRawAsync(@"exec DeleteStudent @studentId", param));
         }
     }
 }

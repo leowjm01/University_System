@@ -19,7 +19,7 @@ namespace University_System.Reposibility
         public async Task<IEnumerable<Teachers>> GetAll()
         {
             return await _dbContext.Teachers
-                 .FromSqlRaw<Teachers>("GetTeacherList")
+                 .FromSqlRaw<Teachers>("GetAllTeachers")
                  .ToListAsync();
         }
 
@@ -28,7 +28,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@teacherId", id);
 
             var reult = await Task.Run(() => _dbContext.Teachers
-                .FromSqlRaw(@"exec GetTeacherID @teacherId", param)
+                .FromSqlRaw(@"exec GetTeacherByTeacherID @teacherId", param)
                 .ToListAsync());
 
             return reult;
@@ -49,7 +49,7 @@ namespace University_System.Reposibility
         public async Task<int> GetCountAllTeachers()
         {
             var students = await _dbContext.Teachers
-             .FromSqlRaw<Teachers>("GetTeacherList")
+             .FromSqlRaw<Teachers>("GetAllTeachers")
              .ToListAsync();
 
             return students.Count();
@@ -60,7 +60,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@teacherName", name ?? (object)DBNull.Value);
 
             var result = await Task.Run(() => _dbContext.Teachers
-                .FromSqlRaw(@"exec GetTeacherName @teacherName", param)
+                .FromSqlRaw(@"exec GetTeacherByTeacherName @teacherName", param)
                 .ToListAsync());
 
             return result.Count();
@@ -98,7 +98,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@teacherId", id);
 
             return await Task.Run(() => _dbContext.Database
-            .ExecuteSqlRawAsync(@"exec DeletedTeacher @teacherId", param));
+            .ExecuteSqlRawAsync(@"exec DeleteTeacher @teacherId", param));
         }
     }
 }

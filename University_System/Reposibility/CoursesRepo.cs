@@ -16,7 +16,36 @@ namespace University_System.Reposibility
         public async Task<IEnumerable<Courses>> GetAll()
         {
             var CourseTeacher = await _dbContext.CoursesTeachers
-                .FromSqlRaw<CoursesAndTeachers>("GetCourseList").ToListAsync();
+                .FromSqlRaw<CoursesAndTeachers>("GetAllCourses").ToListAsync();
+
+            var courses = new List<Courses>();
+
+            foreach (var CT in CourseTeacher)
+            {
+                var c = new Courses()
+                {
+                    teacherId = CT.teacherId,
+                    courseId = CT.courseId,
+                    courseName = CT.courseName,
+                    Teachers = new Teachers
+                    {
+                        teacherId = CT.teacherId,
+                        teacherName = CT.teacherName,
+                        email = CT.email,
+                        gender = CT.gender,
+                        IsDeleted= CT.IsDeleted
+                    }
+                };
+                courses.Add(c);
+            }
+
+            return courses;
+        }
+
+        public async Task<IEnumerable<Courses>> GetAllIncludeDelete()
+        {
+            var CourseTeacher = await _dbContext.CoursesTeachers
+                .FromSqlRaw<CoursesAndTeachers>("GetAllCoursesIncludeDelete").ToListAsync();
 
             var courses = new List<Courses>();
 
@@ -47,7 +76,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@courseId", id);
 
             var CourseTeacher = await _dbContext.CoursesTeachers
-                .FromSqlRaw(@"exec GetCourseID @courseId", param).ToListAsync();
+                .FromSqlRaw(@"exec GetCourseByCourseId @courseId", param).ToListAsync();
 
 
             var courses = new List<Courses>();
@@ -88,7 +117,7 @@ namespace University_System.Reposibility
         {
 
             var CourseTeacher = await _dbContext.CoursesTeachers
-                    .FromSqlRaw("exec GetAllCourseByTeacherId @TeacherId, @PageNum, @PageSize",
+                    .FromSqlRaw("exec GetPaginatedCoursesByTeacherId @TeacherId, @PageNum, @PageSize",
                         new SqlParameter("@TeacherId", id),
                         new SqlParameter("@PageNum", pageNum),
                         new SqlParameter("@PageSize", pageSize))
@@ -154,7 +183,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@teacherId", id);
 
             var courses = await _dbContext.Courses
-                .FromSqlRaw(@"exec GetCourseListByTeacherId @teacherId", param)
+                .FromSqlRaw(@"exec GetAllCoursesByTeacherId @teacherId", param)
                 .ToListAsync();
 
             return courses.Count();
@@ -163,7 +192,7 @@ namespace University_System.Reposibility
         public async Task<int> GetCountAllCourses()
         {
             var courses = await _dbContext.Courses
-             .FromSqlRaw<Courses>("GetCourseList")
+             .FromSqlRaw<Courses>("GetAllCourses")
              .ToListAsync();
 
             return courses.Count();
@@ -174,7 +203,7 @@ namespace University_System.Reposibility
             var param = new SqlParameter("@courseName", name ?? (object)DBNull.Value);
 
             var result = await Task.Run(() => _dbContext.CoursesTeachers
-                .FromSqlRaw(@"exec GetCourseName @courseName", param)
+                .FromSqlRaw(@"exec GetCourseByCourseName @courseName", param)
                 .ToListAsync());
 
             return result.Count();

@@ -9,13 +9,6 @@
     {
         return isMale ? "Male" : "Female";
     }
-
-    public string EncryptStudentId(int? studentId)
-    {
-        var encryptedData = System.Text.Encoding.UTF8.GetBytes(studentId.ToString());
-
-        return Convert.ToBase64String(encryptedData);
-    }
 }
 
 
@@ -85,10 +78,10 @@
                         </td>
                         <td>
                             @{
-                                var encryptedStudentId = EncryptStudentId(item.studentId);
+                                // var encryptedStudentId = EncryptStudentId(item.studentId);
                             }
                             <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
-                            <a asp-action="Details" asp-route-id="@encryptedStudentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
+                            <a asp-action="Details" asp-route-id="@item.studentId" class="btn btn-info" style="background-color:greenyellow">Details</a> 
                             <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
@@ -142,5 +135,6 @@
             }, 1000); 
         });
     </script>
+
 }
  

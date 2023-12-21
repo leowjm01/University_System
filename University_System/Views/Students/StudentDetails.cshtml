@@ -59,6 +59,9 @@
                         Course
                     </th>
                     <th>
+                        Course Status
+                    </th>
+                    <th>
                         Mark
                     </th>
                     <th>
@@ -75,6 +78,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => result.Courses.courseName)
+                        </td>
+                        <td>
+                            @(result.Courses.IsDeleted ? "Inactive" : " Active")
                         </td>
                         <td>
                             @(result.mark == null ? " NIL " : @Html.DisplayFor(modelItem => result.mark))

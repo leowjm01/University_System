@@ -110,8 +110,8 @@ namespace University_System.Controllers
                 return NotFound();
             }
 
-            ViewData["courseId"] = new SelectList(await CoursesService.GetAll(), "courseId", "courseName", result.First().courseId);
-            ViewData["studentId"] = new SelectList(await StudentsService.GetAll(), "studentId", "studentName", result.First().studentId);
+            ViewData["courseId"] = new SelectList(await CoursesService.GetAllIncludeDelete(), "courseId", "courseName", result.First().courseId);
+            ViewData["studentId"] = new SelectList(await StudentsService.GetAllIncludeDelete(), "studentId", "studentName", result.First().studentId);
 
             return View(result.FirstOrDefault());
         }

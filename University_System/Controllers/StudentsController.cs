@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using UniSystemTest.Models;
 using University_System.Data;
 using University_System.Services;
@@ -67,7 +69,6 @@ namespace University_System.Controllers
         // GET: Students/Details
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 5)
         {
-
             var viewModel = await paginationScoreResult(id, pageNum, pageSize);
 
             return View(viewModel);
@@ -176,8 +177,12 @@ namespace University_System.Controllers
         public async Task<StudentScoreResultViewModel> paginationScoreResult(int studentId, int pageNum, int pageSize)
         {
             var students = await Studentservice.GetById(studentId);
+
             var paginatedResult = await ScoreResultsservice.GetScoreResultByStudentId(studentId, pageNum, pageSize);
-            int totalCount = 0;
+
+            //var encryptedId = EncryptStudentId(studentId);
+
+            //students.FirstOrDefault().studentId =Convert.ToInt32(encryptedId);
 
             var viewModel = new StudentScoreResultViewModel
             {
@@ -186,7 +191,7 @@ namespace University_System.Controllers
             };
 
 
-            totalCount = await ScoreResultsservice.GetCountAllScoreResultByStudentId(studentId);
+           int totalCount = await ScoreResultsservice.GetCountAllScoreResultByStudentId(studentId);
 
             ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             ViewBag.CurrentPage = pageNum;
@@ -194,5 +199,11 @@ namespace University_System.Controllers
 
             return viewModel;
         }
+
+        //public string EncryptStudentId(int studentId)
+        //{
+        //    byte[] data = Encoding.UTF8.GetBytes(studentId.ToString());
+        //    return Convert.ToBase64String(data);
+        //}
     }
 }

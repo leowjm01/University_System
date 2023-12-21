@@ -15,7 +15,11 @@ namespace University_System.Services
         public async Task<IEnumerable<Students>> GetAll()
         {
             return (await _reponsitory.GetAll());
-        }                                                      
+        }
+        public async Task<IEnumerable<Students>> GetAllIncludeDelete()
+        {
+            return (await _reponsitory.GetAllIncludeDelete());
+        }
         public async Task<IEnumerable<Students>> GetById(int id)
         {
             return (await _reponsitory.GetById(id));

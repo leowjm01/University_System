@@ -6,6 +6,7 @@ namespace University_System.Reposibility
     public interface IStudentsReponsitory
     {
         Task<IEnumerable<Students>> GetAll();                                                                   // retrive all students data
+        Task<IEnumerable<Students>> GetAllIncludeDelete();                                                      // retrive all students data include is delete
         Task<IEnumerable<Students>> GetById(int id);                                                            // get students by student id
         Task<IEnumerable<Students>> GetPagedStudents(string studentName, int pageNum, int pageSize);            // pagination and search function
         Task<int> GetCountAllStudents();                                                                        // count all students
@@ -31,6 +32,7 @@ namespace University_System.Reposibility
     public interface ICoursesReponsitory
     {
         Task<IEnumerable<Courses>> GetAll();                                                                    // retrive all course data
+        Task<IEnumerable<Courses>> GetAllIncludeDelete();                                                       // retrive all course data include delete
         Task<IEnumerable<Courses>> GetById(int id);                                                             // get courses by course Id
         Task<IEnumerable<Courses>> GetCourseByStudentId(int id);                                                // get where course No exit in score result
         Task<IEnumerable<Courses>> GetCourseByTeacherId(int id, int pageNum, int pageSize);                     // get courses by teacher Id

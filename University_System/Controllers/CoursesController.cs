@@ -63,7 +63,7 @@ namespace University_System.Controllers
         {
             var course = await CoursesService.GetById(id);
 
-            if (course == null)
+            if (course.Count() == 0)
             {
                 return NotFound();
             }
@@ -93,7 +93,7 @@ namespace University_System.Controllers
 
             var getAllTeacher = await TeachersService.GetAll();
 
-            if (course == null)
+            if (course.Count() == 0)
             {
                 return NotFound();
             }
@@ -130,7 +130,7 @@ namespace University_System.Controllers
         {
             var courses = await CoursesService.GetById(id);
 
-            if (courses == null)
+            if (courses.Count() == 0)
             {
                 return NotFound();
             }

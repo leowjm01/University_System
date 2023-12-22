@@ -24,14 +24,8 @@ namespace University_System.Controllers
             return View();
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
-
-
         [Route("Home/Error")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int? statusCode)
         {
             switch (statusCode)
@@ -43,10 +37,10 @@ namespace University_System.Controllers
                 case 500:
                     return View("Error500");
                 case 503:
-                    return View("Error502");
+                    return View("Error503");
             }
 
-            return View("Error");
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

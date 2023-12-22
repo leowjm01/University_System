@@ -68,6 +68,11 @@ namespace University_System.Controllers
         {
             var viewModel = await paginationCourse(id, pageNum, pageSize);
 
+            if (viewModel.Teachers == null)
+            {
+                return NotFound();
+            }
+
             return View(viewModel);
         }
 
@@ -77,6 +82,11 @@ namespace University_System.Controllers
         {
 
             var viewModel = await paginationCourse(id, pageNum, pageSize);
+
+            if (viewModel.Teachers == null)
+            {
+                return NotFound();
+            }
 
             return View(viewModel);
         }

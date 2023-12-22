@@ -91,7 +91,7 @@ namespace University_System.Controllers
         {
             var result = await ScoreResultsService.GetById(id);
 
-            if (result == null)
+            if (result.Count() == 0)
             {
                 return NotFound();
             }
@@ -105,7 +105,7 @@ namespace University_System.Controllers
         {
             var result = await ScoreResultsService.GetById(id);
 
-            if (result == null)
+            if (result.Count() == 0)
             {
                 return NotFound();
             }
@@ -144,7 +144,7 @@ namespace University_System.Controllers
         {
             var result = await ScoreResultsService.GetById(id);
 
-            if (result == null)
+            if (result.Count() == 0)
             {
                 return NotFound();
             }

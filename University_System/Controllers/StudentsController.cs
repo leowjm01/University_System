@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -71,6 +72,11 @@ namespace University_System.Controllers
         {
             var viewModel = await paginationScoreResult(id, pageNum, pageSize);
 
+            if (viewModel.Students == null)
+            {
+                return NotFound();
+            }
+
             return View(viewModel);
         }
 
@@ -79,6 +85,11 @@ namespace University_System.Controllers
         {
 
             var viewModel = await paginationScoreResult(id, pageNum, pageSize);
+
+            if (viewModel.Students == null)
+            {
+                return NotFound();
+            }
 
             return View(viewModel);
         }
@@ -157,7 +168,7 @@ namespace University_System.Controllers
 
             var paginatedStudents = await Studentservice.GetPagedStudents(studentName, pageNum, pageSize);
             int totalCount = 0;
-  
+
             if (studentName != null)
             {
                 totalCount = await Studentservice.GetCountByName(studentName);
@@ -180,10 +191,6 @@ namespace University_System.Controllers
 
             var paginatedResult = await ScoreResultsservice.GetScoreResultByStudentId(studentId, pageNum, pageSize);
 
-            //var encryptedId = EncryptStudentId(studentId);
-
-            //students.FirstOrDefault().studentId =Convert.ToInt32(encryptedId);
-
             var viewModel = new StudentScoreResultViewModel
             {
                 Students = students.FirstOrDefault(),
@@ -200,10 +207,5 @@ namespace University_System.Controllers
             return viewModel;
         }
 
-        //public string EncryptStudentId(int studentId)
-        //{
-        //    byte[] data = Encoding.UTF8.GetBytes(studentId.ToString());
-        //    return Convert.ToBase64String(data);
-        //}
     }
 }

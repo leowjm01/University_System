@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace UniSystemTest.Models
 {
@@ -9,6 +10,8 @@ namespace UniSystemTest.Models
         public int? scoreResultId { get; set; }
 
         [Range(0,100)]
+        [Column(TypeName = "decimal(6, 2)")]
+        [RegularExpression(@"^\d{0,6}(\.\d{1,2})?$", ErrorMessage = "Maximum 6 digits with 2 decimal places.")]
         public decimal? mark { get; set; }
 
         [StringLength(5)]

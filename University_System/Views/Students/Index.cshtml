@@ -77,11 +77,8 @@
                             @Html.DisplayFor(modelItem => item.email)
                         </td>
                         <td>
-                            @{
-                                // var encryptedStudentId = EncryptStudentId(item.studentId);
-                            }
                             <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.studentId" class="btn btn-info" style="background-color:greenyellow">Details</a> 
+                            <a asp-action="Details" asp-route-id="@item.studentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
                             <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
@@ -135,6 +132,5 @@
             }, 1000); 
         });
     </script>
-
 }
  

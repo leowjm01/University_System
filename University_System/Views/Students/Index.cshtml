@@ -77,16 +77,16 @@
                             @Html.DisplayFor(modelItem => item.email)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a>
+                            <a asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-primary">Edit</a> 
                             <a asp-action="Details" asp-route-id="@item.studentId" class="btn btn-info" style="background-color:greenyellow">Details</a>
                             <a asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 }
-
             </tbody>
         </table>
     }
+
 
 <div class="d-flex justify-content-center">
     @if (ViewBag.TotalPages > 1)
@@ -132,5 +132,6 @@
             }, 1000); 
         });
     </script>
+
 }
  

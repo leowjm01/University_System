@@ -14,6 +14,7 @@ using UniSystemTest.Models;
 using University_System.Data;
 using University_System.Services;
 
+
 namespace University_System.Controllers
 {
     public class StudentsController : Controller
@@ -68,6 +69,7 @@ namespace University_System.Controllers
 
 
         // GET: Students/Details
+        [HttpGet]
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 5)
         {
             var viewModel = await paginationScoreResult(id, pageNum, pageSize);
@@ -76,7 +78,6 @@ namespace University_System.Controllers
             {
                 return NotFound();
             }
-
             return View(viewModel);
         }
 
@@ -97,6 +98,7 @@ namespace University_System.Controllers
 
 
         // GET: Students/Edit
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var student = await Studentservice.GetById(id);

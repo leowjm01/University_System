@@ -68,10 +68,10 @@ else
                             @Html.DisplayFor(modelItem => item.Courses.courseName)
                     </td>
                     <td>
-                            @(item.mark == null ? " NIL " : @Html.DisplayFor(modelItem => item.mark))
+                            @(item.mark == null ? " N/A " : @Html.DisplayFor(modelItem => item.mark))
                     </td>
                     <td>
-                            @(item.grade == null ? " NIL " : @Html.DisplayFor(modelItem => item.grade))
+                            @(item.grade == null ? " N/A " : @Html.DisplayFor(modelItem => item.grade))
                     </td>
                     <td>
                             @(item.Courses.IsDeleted ? "Inactive" : " Active")

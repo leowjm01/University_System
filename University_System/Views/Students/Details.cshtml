@@ -83,10 +83,10 @@
                             @(result.Courses.IsDeleted ? "Inactive" : " Active")
                         </td>
                         <td>
-                            @(result.mark == null ? " NIL " : @Html.DisplayFor(modelItem => result.mark))
+                            @(result.mark == null ? " N/A " : @Html.DisplayFor(modelItem => result.mark))
                         </td>
                         <td>
-                            @(result.grade == null ? " NIL " : @Html.DisplayFor(modelItem => result.grade))
+                            @(result.grade == null ? " N/A " : @Html.DisplayFor(modelItem => result.grade))
                         </td>
                     </tr>
                 }
@@ -127,3 +127,5 @@
 <div style="padding-top: 20px">
     <a asp-action="Index" class="btn btn-primary">Back</a>
 </div>
+
+

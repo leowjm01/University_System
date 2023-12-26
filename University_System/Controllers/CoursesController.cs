@@ -28,7 +28,7 @@ namespace University_System.Controllers
         public async Task<IActionResult> Index(string courseName, int pageNum = 1, int pageSize = 10)
         {
 
-            var paginatedCourses = await pagination(courseName, pageNum, pageSize);
+            IEnumerable<Courses> paginatedCourses = await pagination(courseName, pageNum, pageSize);
             ViewData["CourseName"] = courseName;
 
             return View(paginatedCourses);
@@ -38,7 +38,7 @@ namespace University_System.Controllers
         // GET: Courses/Create
         public async Task<IActionResult> Create()
         {
-            var getAllTeacher = await TeachersService.GetAll();
+            IEnumerable<Teachers> getAllTeacher = await TeachersService.GetAll();
 
             ViewData["teacherId"] = new SelectList(getAllTeacher, "teacherId", "teacherName");
             return View();
@@ -61,7 +61,7 @@ namespace University_System.Controllers
         // GET: Courses/Details
         public async Task<IActionResult> Details(int id)
         {
-            var course = await CoursesService.GetById(id);
+            IEnumerable<Courses> course = await CoursesService.GetById(id);
 
             if (course.Count() == 0)
             {
@@ -71,27 +71,13 @@ namespace University_System.Controllers
             return View(course.FirstOrDefault());
         }
 
-        // GET: Courses/DetailsFromTeacher
-        //public async Task<IActionResult> GetDetailsFromTeacher(int id)
-        //{
-        //    var course = await CoursesService.GetByTeacherId(id);
-
-        //    if (course == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(course.FirstOrDefault());
-        //}
-
-
 
         // GET: Courses/Edit
         public async Task<IActionResult> Edit(int id)
         {
-            var course = await CoursesService.GetById(id);
+            IEnumerable<Courses> course = await CoursesService.GetById(id);
 
-            var getAllTeacher = await TeachersService.GetAll();
+            IEnumerable<Teachers> getAllTeacher = await TeachersService.GetAll();
 
             if (course.Count() == 0)
             {
@@ -106,7 +92,7 @@ namespace University_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("courseId,courseName,teacherId")] Courses courses)
         {
-            var getAllTeacher = await TeachersService.GetAll();
+            IEnumerable<Teachers> getAllTeacher = await TeachersService.GetAll();
 
             if (id != courses.courseId)
             {
@@ -128,7 +114,7 @@ namespace University_System.Controllers
         // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var courses = await CoursesService.GetById(id);
+            IEnumerable<Courses> courses = await CoursesService.GetById(id);
 
             if (courses.Count() == 0)
             {
@@ -152,7 +138,7 @@ namespace University_System.Controllers
         public async Task<IEnumerable<Courses>> pagination(string courseName, int pageNum, int pageSize)
         {
 
-            var paginatedCourses = await CoursesService.GetPagedCourses(courseName, pageNum, pageSize);
+            IEnumerable<Courses> paginatedCourses = await CoursesService.GetPagedCourses(courseName, pageNum, pageSize);
             int totalCount = 0;
 
             if (courseName != null)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using University_System.Data;
 
@@ -11,9 +12,11 @@ using University_System.Data;
 namespace University_System.Migrations
 {
     [DbContext(typeof(UniDBContext))]
-    partial class UniDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231226031214_SP1")]
+    partial class SP1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,67 +49,6 @@ namespace University_System.Migrations
                     b.HasIndex("teacherId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("UniSystemTest.Models.CoursesAndTeachers", b =>
-                {
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("courseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("courseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("gender")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("teacherId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("teacherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("CoursesTeachers");
-                });
-
-            modelBuilder.Entity("UniSystemTest.Models.ResultStudentCourse", b =>
-                {
-                    b.Property<int>("courseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("courseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("gender")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("grade")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("mark")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("scoreResultId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("studentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("studentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("ResultStudentCourse");
                 });
 
             modelBuilder.Entity("UniSystemTest.Models.ScoreResults", b =>

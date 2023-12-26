@@ -50,7 +50,6 @@ namespace University_System.Reposibility
     {
         Task<IEnumerable<ScoreResults>> GetAll();                                                                   // retrive all score results data
         Task<IEnumerable<ScoreResults>> GetById(int id);                                                            // get score result data by score result id
-        Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId);       // Check couse repeated by student selected
         Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize);               // get score result by student Id
         Task<IEnumerable<ScoreResults>> GetPagedScoreResults(string studentName, int pageNum, int pageSize);        // pagination and search function
         Task<int> GetCountAllScoreResultByStudentId(int id);                                                        // count all score result by student id

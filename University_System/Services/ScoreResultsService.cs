@@ -22,11 +22,6 @@ namespace University_System.Services
             return (await _reponsitory.GetById(id));
         }
 
-        public async Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId)
-        {
-            return (await _reponsitory.CheckCourseSelected(scoreResultId, studentId, courseId));
-        }
-
         public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize)
         {
             return (await _reponsitory.GetScoreResultByStudentId(id, pageNum, pageSize));
@@ -82,6 +77,15 @@ namespace University_System.Services
 
         public async Task<int> Delete(int id) 
         {
+            IEnumerable<ScoreResults> result = await GetById(id);
+
+            //delete the select exam in student table
+            int getExamSelected = await GetExamSelectedByStudentId(result.First().studentId);
+            getExamSelected = result.First().mark == null || result.First().mark < 50 ? getExamSelected - 1 : getExamSelected;
+            getExamSelected = getExamSelected == getExamSelected - 1 ? 0 : getExamSelected;
+
+            await UpdateExamSelected(result.First().studentId, getExamSelected);
+
             return (await _reponsitory.Delete(id)); 
         }
 
@@ -89,6 +93,8 @@ namespace University_System.Services
         {
             return (await _reponsitory.DeleteByStudentId(id));
         }
+
+
 
         //Check the grade of score results
         public void checkGrade(ScoreResults result)

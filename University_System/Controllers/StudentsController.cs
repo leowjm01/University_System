@@ -31,7 +31,7 @@ namespace University_System.Controllers
         // GET: Students
         public async Task<IActionResult> Index(string studentName, int pageNum = 1, int pageSize = 10)
         {
-            var paginatedStudents = await pagination(studentName, pageNum, pageSize);
+            IEnumerable<Students> paginatedStudents = await pagination(studentName, pageNum, pageSize);
             ViewData["StudentName"] = studentName;
 
             return View(paginatedStudents);
@@ -72,7 +72,7 @@ namespace University_System.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 5)
         {
-            var viewModel = await paginationScoreResult(id, pageNum, pageSize);
+            StudentScoreResultViewModel viewModel = await paginationScoreResult(id, pageNum, pageSize);
 
             if (viewModel.Students == null)
             {
@@ -85,7 +85,7 @@ namespace University_System.Controllers
         public async Task<IActionResult> StudentDetails(int id, int pageNum = 1, int pageSize = 5)
         {
 
-            var viewModel = await paginationScoreResult(id, pageNum, pageSize);
+            StudentScoreResultViewModel viewModel = await paginationScoreResult(id, pageNum, pageSize);
 
             if (viewModel.Students == null)
             {
@@ -101,7 +101,7 @@ namespace University_System.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var student = await Studentservice.GetById(id);
+            IEnumerable<Students> student = await Studentservice.GetById(id);
 
             if (student == null)
             {
@@ -142,7 +142,7 @@ namespace University_System.Controllers
         // GET: Students/Delete
         public async Task<IActionResult> Delete(int id)
         {
-            var student = await Studentservice.GetById(id);
+            IEnumerable<Students> student = await Studentservice.GetById(id);
 
             if (student == null)
             {
@@ -168,7 +168,7 @@ namespace University_System.Controllers
         public async Task <IEnumerable<Students>> pagination(string studentName, int pageNum, int pageSize)
         {
 
-            var paginatedStudents = await Studentservice.GetPagedStudents(studentName, pageNum, pageSize);
+            IEnumerable<Students> paginatedStudents = await Studentservice.GetPagedStudents(studentName, pageNum, pageSize);
             int totalCount = 0;
 
             if (studentName != null)
@@ -189,11 +189,11 @@ namespace University_System.Controllers
         //pagination for course
         public async Task<StudentScoreResultViewModel> paginationScoreResult(int studentId, int pageNum, int pageSize)
         {
-            var students = await Studentservice.GetById(studentId);
+            IEnumerable<Students> students = await Studentservice.GetById(studentId);
 
-            var paginatedResult = await ScoreResultsservice.GetScoreResultByStudentId(studentId, pageNum, pageSize);
+            IEnumerable<ScoreResults> paginatedResult = await ScoreResultsservice.GetScoreResultByStudentId(studentId, pageNum, pageSize);
 
-            var viewModel = new StudentScoreResultViewModel
+            StudentScoreResultViewModel viewModel = new StudentScoreResultViewModel
             {
                 Students = students.FirstOrDefault(),
                 ScoreResults = paginatedResult.ToList(),

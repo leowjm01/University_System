@@ -7,11 +7,87 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="StoreProcedure\script.sql" />
+    <None Remove="StoreProcedure\dbo.AddNewCourse.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.AddNewScoreResult.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.AddNewStudent.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.AddNewTeacher.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.CheckExamSelected.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.DeleteCourse.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.DeleteScoreresult.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.DeleteScoreResultByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.DeleteStudent.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.DeleteTeacher.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllCourses.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllCoursesByTeacherId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllCoursesIncludeDelete.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllResults.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllScoreResultsByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllStudents.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllStudentsIncludeDelete.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetAllTeachers.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetCourseByCourseId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetCourseByCourseName.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetCourseByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetPaginatedCourses.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetPaginatedCoursesByTeacherId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetPaginatedScoreResult.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetPaginatedScoreResultByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetPaginatedStudents.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetPaginatedTeachers.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetScoreResultByScoreResultID.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetScoreResultByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetScoreResultByStudentName.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetStudentByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetStudentByStudentName.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetTeacherByTeacherID.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.GetTeacherByTeacherName.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.UpdateCourse.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.UpdateScoreResult.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.UpdateSelectedExamByStudentId.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.UpdateStudent.StoredProcedure.sql" />
+    <None Remove="StoreProcedure\dbo.UpdateTeacher.StoredProcedure.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="StoreProcedure\script.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.AddNewCourse.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.AddNewScoreResult.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.AddNewStudent.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.AddNewTeacher.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.CheckExamSelected.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.DeleteCourse.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.DeleteScoreresult.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.DeleteScoreResultByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.DeleteStudent.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.DeleteTeacher.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllCourses.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllCoursesByTeacherId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllCoursesIncludeDelete.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllResults.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllScoreResultsByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllStudents.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllStudentsIncludeDelete.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetAllTeachers.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetCourseByCourseId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetCourseByCourseName.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetCourseByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetPaginatedCourses.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetPaginatedCoursesByTeacherId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetPaginatedScoreResult.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetPaginatedScoreResultByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetPaginatedStudents.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetPaginatedTeachers.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetScoreResultByScoreResultID.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetScoreResultByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetScoreResultByStudentName.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetStudentByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetStudentByStudentName.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetTeacherByTeacherID.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.GetTeacherByTeacherName.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.UpdateCourse.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.UpdateScoreResult.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.UpdateSelectedExamByStudentId.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.UpdateStudent.StoredProcedure.sql" />
+    <EmbeddedResource Include="StoreProcedure\dbo.UpdateTeacher.StoredProcedure.sql" />
   </ItemGroup>
 
   <ItemGroup>

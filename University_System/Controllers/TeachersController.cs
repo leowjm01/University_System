@@ -27,7 +27,7 @@ namespace University_System.Controllers
         public async Task<IActionResult> Index(string teacherName, int pageNum = 1, int pageSize = 10)
         {
 
-            var paginatedteachers = await pagination(teacherName, pageNum, pageSize);
+            IEnumerable<Teachers> paginatedteachers = await pagination(teacherName, pageNum, pageSize);
             ViewData["TeacherName"] = teacherName;
             return View(paginatedteachers);
         }
@@ -66,7 +66,7 @@ namespace University_System.Controllers
         // GET: Teachers/Details
         public async Task<IActionResult> Details(int id, int pageNum = 1, int pageSize = 10)
         {
-            var viewModel = await paginationCourse(id, pageNum, pageSize);
+            TeacherCourseViewModel viewModel = await paginationCourse(id, pageNum, pageSize);
 
             if (viewModel.Teachers == null)
             {
@@ -81,7 +81,7 @@ namespace University_System.Controllers
         public async Task<IActionResult> TeacherDetails(int id, int pageNum = 1, int pageSize = 5)
         {
 
-            var viewModel = await paginationCourse(id, pageNum, pageSize);
+            TeacherCourseViewModel viewModel = await paginationCourse(id, pageNum, pageSize);
 
             if (viewModel.Teachers == null)
             {
@@ -95,7 +95,7 @@ namespace University_System.Controllers
         // GET: Teachers/Edit
         public async Task<IActionResult> Edit(int id)
         {
-            var teacher = await TeachersService.GetById(id);
+            IEnumerable<Teachers> teacher = await TeachersService.GetById(id);
 
             if (teacher == null)
             {
@@ -135,7 +135,7 @@ namespace University_System.Controllers
         // GET: Teachers/Delete
         public async Task<IActionResult> Delete(int id)
         {
-            var teacher = await TeachersService.GetById(id);
+            IEnumerable<Teachers> teacher = await TeachersService.GetById(id);
 
             if (teacher == null)
             {
@@ -149,7 +149,7 @@ namespace University_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var count = await CourseService.GetCountAllCoursesByTeacherId(id);
+            int count = await CourseService.GetCountAllCoursesByTeacherId(id);
 
             if (count >= 1 ) 
             {
@@ -169,7 +169,7 @@ namespace University_System.Controllers
         public async Task<IEnumerable<Teachers>> pagination(string teacherName, int pageNum, int pageSize)
         {
 
-            var paginatedTeachers = await TeachersService.GetPagedTeachers(teacherName, pageNum, pageSize);
+            IEnumerable<Teachers> paginatedTeachers = await TeachersService.GetPagedTeachers(teacherName, pageNum, pageSize);
             int totalCount = 0;
 
             if (teacherName != null)
@@ -192,18 +192,17 @@ namespace University_System.Controllers
         //pagination for course
         public async Task<TeacherCourseViewModel> paginationCourse(int teacherId, int pageNum, int pageSize)
         {
-            var teacher = await TeachersService.GetById(teacherId);
-            var paginatedCourses = await CourseService.GetCourseByTeacherId(teacherId, pageNum, pageSize);
-            int totalCount = 0;
+            IEnumerable<Teachers> teacher = await TeachersService.GetById(teacherId);
+            IEnumerable<Courses> paginatedCourses = await CourseService.GetCourseByTeacherId(teacherId, pageNum, pageSize);
 
-            var viewModel = new TeacherCourseViewModel
+            TeacherCourseViewModel viewModel = new TeacherCourseViewModel
             {
                 Teachers = teacher.FirstOrDefault(),
                 Courses = paginatedCourses.ToList(),
             };
 
             
-            totalCount = await CourseService.GetCountAllCoursesByTeacherId(teacherId);
+            int totalCount = await CourseService.GetCountAllCoursesByTeacherId(teacherId);
 
             ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             ViewBag.CurrentPage = pageNum;

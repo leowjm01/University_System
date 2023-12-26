@@ -87,19 +87,6 @@ namespace University_System.Reposibility
             return results;
         }
 
-        public async Task<IEnumerable<ScoreResults>> CheckCourseSelected(int? scoreResultId, int studentId, int courseId)
-        {
-            var paramS = new SqlParameter("@studentId", studentId);
-            var paramC = new SqlParameter("@courseId", courseId);
-            var paramR = new SqlParameter("@scoreResultId", scoreResultId == null ? -1 : scoreResultId);
-
-            var result = await Task.Run(() => _dbContext.ScoreResults
-                .FromSqlRaw(@"exec CheckCourseSelected @studentId , @courseId, @scoreResultId", paramS, paramC, paramR)
-                .ToListAsync());
-
-            return result;
-        }
-
         public async Task<IEnumerable<ScoreResults>> GetScoreResultByStudentId(int id, int pageNum, int pageSize)
         {
             var resultStudentCourse = await _dbContext.ResultStudentCourse
